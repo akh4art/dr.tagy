@@ -166,6 +166,7 @@ export default function App() {
   // Orders Admin Panel for review
   const [savedOrders, setSavedOrders] = useState<Order[]>([]);
   const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
+  const [showStickyCta, setShowStickyCta] = useState<boolean>(false);
 
   // Countdown timer state
   const [timeLeft, setTimeLeft] = useState({ hours: 3, minutes: 54, seconds: 48 });
@@ -291,6 +292,19 @@ export default function App() {
       clearTimeout(firstTimeout);
       clearInterval(interval);
     };
+  }, []);
+
+  // Sticky CTA Scroll Handler
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 400) {
+        setShowStickyCta(true);
+      } else {
+        setShowStickyCta(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Calculated Order Totals
@@ -1304,142 +1318,110 @@ export default function App() {
     <div className="min-h-screen bg-[#FCFBF8] text-[#1D1B19] selection:bg-gold-200 selection:text-gold-900 overflow-x-hidden font-sans relative" dir="rtl">
       
       {/* 1. TOP SPECIAL BANNER SLIDESHOW TICKER (Luxury Ribbon) */}
-      <div className="bg-[#092B21] text-[#F7F2EA] py-3 px-4 text-xs md:text-sm font-medium border-b border-gold-400/30 shadow-md relative z-40">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-          <div className="flex-1 flex justify-center items-center gap-2 overflow-hidden h-5">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={tickerIndex}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.5 }}
-                className="flex items-center gap-1.5 justify-center text-center text-[11px] md:text-xs tracking-wide"
-              >
-                <Sparkle className="w-3.5 h-3.5 text-gold-300 shrink-0" />
-                <span className="font-medium text-gold-100">{announcementSlides[tickerIndex]}</span>
-              </motion.div>
-            </AnimatePresence>
+      <div className="bg-[#092B21] text-[#F7F2EA] py-3.5 px-6 text-xs md:text-sm font-medium border-b border-gold-400/35 shadow-lg relative z-40">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-right">
+          <div className="flex items-center gap-2 justify-center">
+            <Sparkles className="w-4 h-4 text-gold-300 shrink-0 animate-pulse" />
+            <span className="font-extrabold text-gold-100 text-xs md:text-sm tracking-wide leading-relaxed">
+              ✨ عرض محدود اليوم: احصلي على واقي الشمس الطبي (SPF50) مجاناً بالكامل (بقيمة <span className="text-white font-mono underline decoration-gold-400">650 TL</span>) عند طلب المجموعة المتكاملة!
+            </span>
           </div>
           
-          <button 
-            onClick={scrollToCheckout} 
-            className="hidden sm:inline-flex items-center gap-1 bg-[#d1ba84] hover:bg-[#aa843f] text-[#092B21] hover:text-white px-3 py-1 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer shadow-sm shadow-gold-900/10"
-            id="cta-top-ticker"
-          >
-            <Flame className="w-3 h-3 animate-pulse" />
-            <span>اقتني العرض فوراٌ</span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={scrollToCheckout} 
+              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-gold-400 to-gold-300 hover:from-gold-300 hover:to-gold-500 text-[#092B21] px-4.5 py-1.5 rounded-full text-xs font-black transition-all shrink-0 cursor-pointer shadow-md hover:shadow-xl active:scale-95"
+              id="cta-top-ticker"
+            >
+              <Flame className="w-3.5 h-3.5 animate-bounce" />
+              <span>استفيدي من العرض الآن</span>
+            </button>
+
+            {/* Quick Deluxe Reservations toggle */}
+            <button 
+              onClick={() => setShowAdminPanel(!showAdminPanel)} 
+              className="p-1.5 bg-white/10 hover:bg-white/20 text-[#F7F2EA] hover:text-gold-300 rounded-full transition-all relative border border-white/10"
+              title="حجوزاتكِ"
+              id="orders-admin-btn"
+            >
+              <ClipboardList className="w-4 h-4" />
+              {savedOrders.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white font-sans text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  {savedOrders.length}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* 2. NAVIGATION BAR (Aesthetic Classy Frosting Block) */}
-      <header className="glass-card-light !bg-white/60 backdrop-blur-xl border-b border-[#ebd7be]/30 py-4.5 px-6 md:px-12 flex items-center justify-between z-30 sticky top-0 transition-transform shadow-md">
-        
-        {/* Brand identity */}
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full border-2 border-gold-300 flex items-center justify-center bg-gradient-to-br from-[#092B21] to-[#124939] shadow-md">
-            <span className="text-[#f4edd9] font-serif text-[15px] font-extrabold tracking-widest">DT</span>
-          </div>
-          <div>
-            <span className="text-xl md:text-2xl font-black text-[#092B21] tracking-tight block">دُكتور تَاجي</span>
-            <span className="text-[9px] uppercase tracking-widest text-gold-500 block -mt-1.5 font-serif font-bold">DR. TAGY CLINICAL SKINCARE</span>
-          </div>
-        </div>
-
-        {/* Desktop premium Menu links */}
-        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs font-bold uppercase tracking-wider text-[#092B21]/95">
-          <a href="#why-us" className="hover:text-gold-500 transition-colors relative group py-1">
-            <span>ميزتنا السريرية</span>
-            <span className="absolute bottom-0 right-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
-          </a>
-          <a href="#clinical-ritual" className="hover:text-gold-500 transition-colors relative group py-1">
-            <span>طقوس الاستخدام</span>
-            <span className="absolute bottom-0 right-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
-          </a>
-          <a href="#products-showcase" className="hover:text-gold-500 transition-colors relative group py-1">
-            <span>مجموعتنا العلاجية</span>
-            <span className="absolute bottom-0 right-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
-          </a>
-          <a href="#reviews" className="hover:text-gold-500 transition-colors relative group py-1">
-            <span>أراء الطبيبات</span>
-            <span className="absolute bottom-0 right-0 w-0 h-0.5 bg-gold-400 group-hover:w-full transition-all duration-300"></span>
-          </a>
-          <a 
-            href="https://wa.me/905511584123?text=مرحباً دكتور تاجي، أود الحصول على استشارة طبية مجانية بخصوص الروتين العلاجي للبشرة في تركيا"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-green-700 hover:text-green-600 transition-colors flex items-center gap-1 group py-1 font-extrabold"
-            id="nav-whatsapp-lnk"
-          >
-            <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-            <span>استشارة واتساب</span>
-          </a>
-        </nav>
-
-        {/* Right Nav Options & Local Storage Orders Admin panel */}
-        <div className="flex items-center gap-3.5">
-          <button 
-            onClick={() => setShowAdminPanel(!showAdminPanel)} 
-            className="p-2.5 text-[#092B21] hover:text-gold-500 hover:bg-gold-50/70 rounded-full transition-all relative border border-gold-200/10"
-            title="حجوزاتكِ"
-            id="orders-admin-btn"
-          >
-            <ClipboardList className="w-5 h-5" />
-            {savedOrders.length > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white font-sans text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-black animate-scale shadow-sm">
-                {savedOrders.length}
-              </span>
-            )}
-          </button>
-
-          <button
-            onClick={scrollToCheckout}
-            className="glass-btn-gold px-5 py-2.5 rounded-full text-xs font-black shadow-md hover:shadow-xl transition-all duration-300"
-            id="header-cta"
-          >
-            حجز البكج الفوري
-          </button>
-        </div>
-      </header>
-
       {/* 3. HERO & BEAUTY GOAL SELECTOR SECTION */}
-      <section className="relative py-12 lg:py-24 px-6 md:px-12 lg:px-24 overflow-hidden bg-gradient-to-b from-[#FCFBF8] via-[#FAF6EF] to-[#FCFBF8]">
-        {/* Soft elegant golden glow orbs */}
-        <div className="absolute top-1/4 left-10 w-{450px} h-{450px} rounded-full bg-gold-200/15 blur-[120px] -z-10 animate-pulse"></div>
-        <div className="absolute bottom-10 right-10 w-[500px] h-[500px] rounded-full bg-[#3d6a5c]/8 blur-[130px] -z-10"></div>
-        
-        {/* Fine background thin elegant ring decorations */}
-        <div className="absolute top-10 right-[25%] w-[400px] h-[400px] border border-gold-300/10 rounded-full -z-10 animate-spin-very-slow"></div>
+      <section className="relative py-16 lg:py-28 px-6 md:px-12 lg:px-24 overflow-hidden min-h-[90vh] flex items-center">
+        {/* Aesthetic Background Video Loop */}
+        <div className="absolute inset-0 -z-10 w-full h-full overflow-hidden">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover scale-102"
+          >
+            <source src="https://player.vimeo.com/external/414099238.hd.mp4?s=d0db584100fa1b6bd61019672fb5f989938b813b&profile_id=173&oauth2_token_id=57447761" type="video/mp4" />
+          </video>
+          {/* Glass Overlay of luxury dark green & gold blend */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#092B21]/92 via-[#092B21]/82 to-[#092B21]/94 backdrop-blur-[3px]"></div>
+          {/* Subtle slow spinning decorative rings for the luxury liquid vibe */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-gold-300/5 rounded-full animate-spin-very-slow pointer-events-none"></div>
+        </div>
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           
           {/* Right Column: Catchy luxury typography and offer details */}
-          <div className="lg:col-span-7 space-y-8 text-center lg:text-right">
+          <div className="lg:col-span-7 space-y-8 text-center lg:text-right relative z-10">
             
             {/* Top clinical seal indicator */}
-            <div className="inline-flex items-center gap-2 glass-card-light !bg-white/40 !border-gold-300/30 px-4.5 py-2 rounded-full text-[#092B21] text-xs font-bold leading-none">
-              <Sparkles className="w-4 h-4 text-[#aa843f]" />
-              <span>أرقى مختبرات بروتوكول تجميل البشرة الطبي بأوروبا</span>
+            <div className="inline-flex items-center gap-2 glass-card-light !bg-white/10 !border-gold-300/20 px-4.5 py-2 rounded-full text-gold-300 text-xs font-black leading-none backdrop-blur-md">
+              <Sparkles className="w-4 h-4 text-gold-300 shrink-0" />
+              <span>من أعرق المختبرات الأوروبية للعناية الطبية بالبشرة</span>
             </div>
 
             {/* Main title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#092B21] tracking-tight leading-[1.25]">
-              الروتين العلاجي الفاخر لبشرتك.. <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-600 via-gold-400 to-gold-700 font-serif italic text-3xl md:text-5xl font-light block mt-2 text-right">الآن بفاعلية الذهب السريرية</span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.25]">
+              تألقي ببشرة نضرة ومثالية خلال 15 يوماً <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-gold-200 to-gold-400 font-serif italic text-3xl md:text-4xl lg:text-5xl font-light block mt-2 text-right">الروتين الفاخر لتجديد حيوية وصحة بشرتك</span>
             </h1>
 
             {/* Sub description */}
-            <p className="text-sm md:text-lg text-[#5A544F] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-              مستحضرات دكتور تاجي المصاغة بببتيدات الذهب والبيوتين المزدوج. احصلي على <span className="font-semibold text-[#092B21] underline decoration-gold-400 decoration-2">واقي الشمس الطبي الفاخر SPF50 مجاناً بالكامل</span> عند اختياركِ البكج المتكامل للتجدد والنضارة الفائقة.
+            <p className="text-sm md:text-lg text-[#F7F2EA]/90 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+              روتين فاخر ومتكامل يدمج الفخامة بالحلول السريرية. تعمل المجموعة (من الخطوة 1 إلى 4) بتناغم تام (Synergy) لإعادة الحيوية والنضارة لبشرتك؛ حيث تمنحها امتلاءً فورياً وتغذي حاجز الجلد الطبيعي بالببتيدات الذهبية. اطلبي مجموعتك العلاجية اليوم واحصلي على واقي الشمس الطبي الفاخر مجاناً.
             </p>
 
+            {/* Hero CTAs */}
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3 relative z-20">
+              <button
+                onClick={scrollToCheckout}
+                className="w-full sm:w-auto glass-btn-gold liquid-sheen text-[#092B21] font-sans font-black px-8.5 py-4.5 rounded-xl text-md cursor-pointer flex items-center justify-center gap-2.5 shadow-xl hover:shadow-2xl active:scale-95 transition-all animate-pulse"
+                id="hero-cta-btn"
+              >
+                <ShoppingBag className="w-5 h-5 text-[#092B21]" />
+                <span>ابدئي روتينكِ العلاجي الآن</span>
+              </button>
+              <a
+                href="#clinical-quiz"
+                className="w-full sm:w-auto bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold px-6.5 py-4.5 rounded-xl text-xs transition-colors text-center flex items-center justify-center gap-2 hover:shadow-md backdrop-blur-md"
+                id="hero-secondary-btn"
+              >
+                <span>اكتشفي روتينكِ عبر المستشار الذكي</span>
+                <ArrowRight className="w-4 h-4 rotate-180 text-gold-300" />
+              </a>
+            </div>
+
             {/* Elegant timer countdown framed in fine golden borders */}
-            <div className="glass-card-emerald text-[#F7F2EA] p-5.5 rounded-3xl shadow-2xl max-w-xl mx-auto lg:mx-0 flex flex-col sm:flex-row items-center justify-between gap-5 relative overflow-hidden group">
+            <div className="glass-card-emerald text-[#F7F2EA] p-5.5 rounded-3xl shadow-2xl max-w-xl mx-auto lg:mx-0 flex flex-col sm:flex-row items-center justify-between gap-5 relative overflow-hidden group border border-gold-300/20 backdrop-blur-md">
               <div className="absolute inset-0 bg-gradient-to-r from-gold-300/5 to-transparent skew-x-12 group-hover:translate-x-full transition-transform duration-1000"></div>
               <div className="text-center sm:text-right relative z-10">
-                <span className="text-[10px] text-gold-300 font-extrabold uppercase tracking-widest block">عرض حصري محدود لنهاية اليوم</span>
-                <span className="text-xs md:text-sm font-bold text-white block mt-1">تبقى على انتهاء الهدايا المجانية والشحن:</span>
+                <span className="text-[10px] text-gold-300 font-extrabold uppercase tracking-widest block">عرض حصري ينتهي قريباً</span>
+                <span className="text-xs md:text-sm font-bold text-white block mt-1">المتبقي على انتهاء الهدايا المجانية والشحن المجاني:</span>
               </div>
               <div className="flex gap-3 text-center font-mono relative z-10">
                 <div className="bg-[#124939]/80 px-3.5 py-2.5 rounded-xl border border-gold-300/20 min-w-[62px]">
@@ -1455,28 +1437,6 @@ export default function App() {
                   <span className="text-[10px] text-neutral-300 block mt-0.5 font-sans">ساعة</span>
                 </div>
               </div>
-            </div>
-
-            
-
-            {/* Hero CTAs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3">
-              <button
-                onClick={scrollToCheckout}
-                className="w-full sm:w-auto glass-btn-gold liquid-sheen text-[#092B21] font-sans font-black px-8.5 py-4.5 rounded-xl text-md cursor-pointer flex items-center justify-center gap-2.5 shadow-lg active:scale-95"
-                id="hero-cta-btn"
-              >
-                <ShoppingBag className="w-5 h-5 text-[#092B21]" />
-                <span>اطلبي البكج العلاجي المتكامل</span>
-              </button>
-              <a
-                href="#clinical-quiz"
-                className="w-full sm:w-auto glass-card-light !bg-white/40 border border-[#ebd7be]/40 font-bold px-6.5 py-4.5 rounded-xl text-xs transition-all text-center flex items-center justify-center gap-2 hover:shadow-md"
-                id="hero-secondary-btn"
-              >
-                <span>ابدئي مستشار العناية الذكي</span>
-                <ArrowRight className="w-4 h-4 rotate-180 text-[#092B21]" />
-              </a>
             </div>
 
           </div>
@@ -1720,12 +1680,9 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-            <span className="text-xs font-bold tracking-widest text-[#aa843f] uppercase block">الابتكار التجميلي المتطور</span>
+            <span className="text-xs font-bold tracking-widest text-[#aa843f] uppercase block">الابتكار العلمي المتطور</span>
             <h2 className="text-2xl md:text-4xl font-black text-[#092B21]">لماذا تثقين في تركيبة دكتور تاجي؟</h2>
             <div className="w-16 h-1 bg-gold-400 mx-auto rounded-full"></div>
-            <p className="text-xs md:text-sm text-[#7A746E]">
-              قمنا بإلغاء التنازلات بتقديم روتين علاجي يجمع بين المكونات السريرية فائقة الأمان وطاقة الذهب التجديدية السريعة.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
@@ -1734,9 +1691,9 @@ export default function App() {
               <div className="w-12 h-12 bg-gold-500/10 text-gold-600 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-gold-500/20">
                 <Award className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-[#092B21] mb-2 font-sans">تراخيص طبية معتمدة</h3>
+              <h3 className="text-base font-bold text-[#092B21] mb-2 font-sans">اعتماد طبي ومخبري</h3>
               <p className="text-xs text-[#736D67] leading-relaxed">
-                مستحضرات مسجلة رسمياً وخاضعة لجميع الفحوصات الطبية لمطابقة أرفع المعايير.
+                مستحضرات مسجلة رسمياً وخاضعة لأدق الفحوصات الطبية لمطابقة المعايير الأوروبية والدولية.
               </p>
             </div>
 
@@ -1744,9 +1701,9 @@ export default function App() {
               <div className="w-12 h-12 bg-gold-500/10 text-gold-600 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-gold-500/20">
                 <ShieldCheck className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-[#092B21] mb-2 font-sans">فائقة الأمان للبشرة</h3>
+              <h3 className="text-base font-bold text-[#092B21] mb-2 font-sans">تركيبة فائقة الأمان</h3>
               <p className="text-xs text-[#736D67] leading-relaxed">
-                خالٍ من البارابين، السيليكون والمحسسات والمواد البترولية. لطيف ومجرب كلياً للعيون والجلد الحساس.
+                خالية تماماً من البارابين، السيليكون، والمواد البترولية والمحسّسات. لطيفة وآمنة كلياً على البشرة الحساسة ومنطقة محيط العين.
               </p>
             </div>
 
@@ -1754,9 +1711,9 @@ export default function App() {
               <div className="w-12 h-12 bg-gold-500/10 text-gold-600 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-gold-500/20">
                 <Droplets className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-[#092B21] mb-2 font-sans">خلاصة طاقة طبيعية</h3>
+              <h3 className="text-base font-bold text-[#092B21] mb-2 font-sans">خلاصات طبيعية نشطة</h3>
               <p className="text-xs text-[#736D67] leading-relaxed">
-                تكامل تام بوجود خلاصة الطحالب البحرية وجذور السيكا ونبات البابونج النقي لتهدئة حاجز الجلد.
+                تعتمد على قوة الطبيعة عبر دمج مستخلصات الطحالب البحرية، جذور السيكا، والبابونج النقي لتهدئة وترميم حاجز البشرة.
               </p>
             </div>
 
@@ -1764,9 +1721,9 @@ export default function App() {
               <div className="w-12 h-12 bg-gold-500/10 text-gold-600 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-gold-500/20">
                 <Activity className="w-6 h-6" />
               </div>
-              <h3 className="text-base font-bold text-[#092B21] mb-2 font-sans">تأثير ملموس قياسي</h3>
+              <h3 className="text-base font-bold text-[#092B21] mb-2 font-sans">نتائج سريرية مثبتة</h3>
               <p className="text-xs text-[#736D67] leading-relaxed">
-                نتائج ملحوظة وعلاجية في شد البشرة، إخفاء الخطوط التعبيرية وتطويل الرموش خلال ١٤ إلى ٢١ يوماً بانتظام.
+                تأثير ملحوظ في شد البشرة، ملء الخطوط التعبيرية، وتعزيز كثافة الرموش خلال 14 إلى 21 يوماً من الاستخدام المنتظم.
               </p>
             </div>
 
@@ -1785,10 +1742,10 @@ export default function App() {
             <div className="text-center max-w-xl mx-auto mb-8 space-y-2">
               <div className="inline-flex items-center gap-1.5 text-[11px] text-[#aa843f] font-bold tracking-widest uppercase">
                 <Sparkle className="w-3.5 h-3.5" />
-                <span>الاستشارة الطبية الفورية</span>
+                <span>الاستشارة الرقمية الفورية</span>
               </div>
               <h3 className="text-xl md:text-3xl font-black text-[#092B21]">مستشار دكتور تاجي الذكي للبشرة</h3>
-              <p className="text-xs text-[#706B65] font-light">أجيبي عن سؤالين سريعاً لمعرفة ريفيرنس البرمجية الأكثر مواءمة لنوع بشرتكِ!</p>
+              <p className="text-xs text-[#706B65] font-light">أجيبي عن سؤالين سريعين لتحديد الروتين العلاجي الأنسب والتركيبة الأكثر مواءمة لاحتياجات بشرتكِ.</p>
             </div>
 
             {/* Quiz Progress step indicator bar */}
@@ -1812,10 +1769,10 @@ export default function App() {
                   <h4 className="text-sm md:text-base font-bold text-[#092B21]">الخطوة الأولى: ما هو طبيعة ملمس وطبيعة بشرتك الحالية؟</h4>
                   <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
                     {[
-                      { key: 'oily', title: 'دهنية أو مختلطة (لمعان وبثور)', desc: 'تحتاج موازنة وتطهير عميق' },
-                      { key: 'dry', title: 'جافة أو خشنة (قشور وضيق)', desc: 'تحتاج ترطيب كولاجيني مكثف' },
-                      { key: 'normal', title: 'عادية ومتوازنة الملمس', desc: 'تحتاج حماية وتجديد يومي' },
-                      { key: 'sensitive', title: 'رقيقة وحساسة جداً للحرارة', desc: 'تحتاج حماية سنتيلا مهدئة' }
+                      { key: 'oily', title: 'دهنية أو مختلطة (لمعان وبثور)', desc: 'تحتاج إلى موازنة الإفرازات وتنقية عميقة.' },
+                      { key: 'dry', title: 'جافة أو خشنة (قشور ومظهر باهت)', desc: 'تحتاج إلى ترطيب مكثف ودعم كولاجيني.' },
+                      { key: 'normal', title: 'عادية ومتوازنة', desc: 'تحتاج إلى حماية يومية وتجديد مستمر.' },
+                      { key: 'sensitive', title: 'حساسة جداً وسريعة التهيج', desc: 'تحتاج إلى ترميم وتهدئة بمستخلص السنتتلا.' }
                     ].map(type => (
                       <button
                         key={type.key}
@@ -1866,7 +1823,7 @@ export default function App() {
                   </div>
                   <button 
                     onClick={() => setQuizStep(1)} 
-                    className="text-xs font-bold text-gray-400 hover:text-[#092B21] underline block bg-none cursor-pointer"
+                    className="text-xs font-bold text-gray-400 hover:text-[#092B21] underline block bg-none cursor-pointer mt-4"
                   >
                     العودة للخطوة السابقة
                   </button>
@@ -1888,7 +1845,7 @@ export default function App() {
                   <div className="space-y-2">
                     <h4 className="text-base md:text-lg font-black text-[#092B21]">تم تشخيص وتحليل البشرة بنجاح!</h4>
                     <p className="text-xs text-neutral-500 max-w-md mx-auto">
-                      بناءً على اختيارك لبشرة <span className="font-bold text-gold-600">({quizSkinType})</span> واهتمامك برئيسي <span className="font-bold text-gold-600">({quizMainConcern})</span>، نقترح عليك روتينكِ التالي:
+                      بناءً على اختيارك لبشرة <span className="font-bold text-gold-600">({quizSkinType})</span> واهتمامك الرئيسي <span className="font-bold text-gold-600">({quizMainConcern})</span>، نقترح عليك روتينكِ التالي:
                     </p>
                   </div>
 
@@ -1903,7 +1860,7 @@ export default function App() {
                     </div>
                     
                     <p className="text-[11px] text-[#6A645D] leading-relaxed">
-                      البكج يبدأ بـ <span className="font-bold text-[#092B21]">غسول الطحالب</span> للتنظيف العميق وموازنة الإفرازات، ثم تطبيق <span className="font-bold text-[#092B21]">كريم 6 في 1</span> بببتيدات الذهب لشد وتجديد البشرة، بمرور <span className="font-bold text-[#092B21]">سيروم الرموش المكثف</span>، وأخيراً <span className="font-bold text-red-600">واقي الشمس المهدي لكِ مجاناً</span> كجزء مدمج من باقة التوفير.
+                      البكج يبدأ بـ <span className="font-bold text-[#092B21]">غسول الطحالب</span> للتنظيف العميق وموازنة الإفرازات، ثم تطبيق <span className="font-bold text-[#092B21]">كريم 6 في 1</span> بببتيدات الذهب لشد وتجديد البشرة، يليه <span className="font-bold text-[#092B21]">سيروم الرموش المكثف</span>، وأخيراً <span className="font-bold text-red-600">واقي الشمس المهدي لكِ مجاناً</span> كجزء مدمج من باقة التوفير.
                     </p>
 
                     <div className="flex items-center justify-between border-t border-gold-400/15 pt-3.5 mt-2">
@@ -1971,11 +1928,11 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           
           <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-            <span className="text-xs font-bold tracking-widest text-[#aa843f] uppercase block">طقوس العناية السريرية</span>
-            <h2 className="text-2xl md:text-5xl font-black text-[#092B21]">كيف تطبقين مجموعة دكتور تاجي اليومية؟</h2>
+            <span className="text-xs font-bold tracking-widest text-[#aa843f] uppercase block">الروتين العلاجي اليومي</span>
+            <h2 className="text-2xl md:text-5xl font-black text-[#092B21]">كيف تطبقين مجموعة دكتور تاجي بفاعلية؟</h2>
             <div className="w-16 h-1 bg-gold-400 mx-auto rounded-full"></div>
             <p className="text-xs md:text-sm text-[#706B65] font-light">
-              لتحقيق أقصى إشراقة وتصحيح كامل لعيوب البشرة، ابتكرنا هذا التسلسل الصباحي والمسائي السلس.
+              للحصول على أقصى نضارة وتصحيح متكامل لعيوب البشرة، نوصي باتباع هذا الروتين الصباحي والمسائي المنسق بعناية:
             </p>
           </div>
 
@@ -2245,7 +2202,7 @@ export default function App() {
                             id={`btn-select-to-buy-${p.id}`}
                           >
                             <ShoppingBag className="w-4.5 h-4.5" />
-                            <span>اطلبي الآن</span>
+                            <span>احصلي على الروتين المتكامل الآن ✨</span>
                           </button>
                         </div>
                       </div>
@@ -2730,6 +2687,136 @@ export default function App() {
 
             </div>
 
+          </div>
+
+        </div>
+      </section>
+
+      {/* 8.5 DELUXE BEFORE/AFTER CLINICAL CLINICAL DEMONSTRATION SECTION */}
+      <section className="py-24 bg-gradient-to-b from-[#FAFAF6] to-[#FCFBF8] px-6 md:px-12 lg:px-24 border-t border-b border-gold-300/10" id="before-after-section">
+        <div className="max-w-7xl mx-auto">
+          
+          <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
+            <span className="text-xs font-black tracking-widest text-gold-600 uppercase block">إثباتات سريرية مرئية</span>
+            <h2 className="text-2xl md:text-5xl font-black text-[#092B21]">نتائج التحوّل الفائقة خلال 15 يوماً فقط</h2>
+            <div className="w-20 h-1 bg-gold-400 mx-auto rounded-full"></div>
+            <p className="text-xs md:text-sm text-[#736D67] font-light">
+              شاهدي بالتفصيل والتوثيق الحقيقي كيف تتغير خلايا البشرة بنظام دكتور تاجي الطبي المتكامل. لقطات واقعية غير مبرمجة لعميلات حقيقيات.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            {/* Case 1 */}
+            <div className="glass-card-light overflow-hidden rounded-[2rem] border border-gold-300/20 shadow-xl flex flex-col group hover:shadow-2xl transition-all duration-500">
+              <div className="relative h-64 overflow-hidden flex">
+                {/* Before Side */}
+                <div className="w-1/2 h-full relative overflow-hidden group">
+                  <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&q=80&w=350" alt="Skin Before" referrerPolicy="no-referrer" className="w-full h-full object-cover filter grayscale opacity-90 transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute top-3 left-3 bg-red-600/90 text-white font-bold text-[9px] px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md z-10 border border-white/10">قبل الاستخدام</div>
+                </div>
+                {/* Divide Bar */}
+                <div className="w-1 h-full bg-gold-300/40 relative z-20 flex items-center justify-center">
+                  <div className="w-4 h-4 rounded-full bg-gold-400 border-2 border-white flex items-center justify-center -mx-1 text-[8px] text-white">⚖️</div>
+                </div>
+                {/* After Side */}
+                <div className="w-1/2 h-full relative overflow-hidden group">
+                  <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=350" alt="Skin After" referrerPolicy="no-referrer" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute top-3 right-3 bg-green-700/90 text-white font-bold text-[9px] px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md z-10 border border-white/10">بعد 15 يوماً</div>
+                </div>
+              </div>
+              <div className="p-6 md:p-8 space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#092B21]"></span>
+                  <h3 className="text-base font-black text-[#092B21]">مكافحة الخطوط العميقة وامتلاء الوجه</h3>
+                </div>
+                <p className="text-xs text-[#7A746E] leading-relaxed">
+                  تأثير الببتيدات الذهبية ثلاثية الأبعاد ساهم في ملء التجاعيد وشد خلايا الجلد المرتخية وإعطاء امتلاء طبيعي فوري للوجه ونضارة تظهر بوضوح تحت الضوء.
+                </p>
+                <div className="flex items-center gap-1.5 pt-2 border-t border-neutral-100">
+                  <div className="text-[10px] bg-gold-100 text-[#aa843f] px-2.5 py-1 rounded-md font-bold">المنتج: كريم 6 في 1 المرمم</div>
+                  <div className="text-[10px] bg-neutral-100 text-[#736D67] px-2.5 py-1 rounded-md">الحالة: عميلة موثقة لديها جفاف شديد</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Case 2 */}
+            <div className="glass-card-light overflow-hidden rounded-[2rem] border border-gold-300/20 shadow-xl flex flex-col group hover:shadow-2xl transition-all duration-500">
+              <div className="relative h-64 overflow-hidden flex">
+                {/* Before Side */}
+                <div className="w-1/2 h-full relative overflow-hidden group">
+                  <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=350" alt="Pores Before" referrerPolicy="no-referrer" className="w-full h-full object-cover filter saturate-50 blur-[0.5px] opacity-90 transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute top-3 left-3 bg-red-650/90 text-white font-bold text-[9px] px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md z-10 border border-white/10">قبل الاستخدام</div>
+                </div>
+                {/* Divide Bar */}
+                <div className="w-1 h-full bg-gold-300/40 relative z-20 flex items-center justify-center">
+                  <div className="w-4 h-4 rounded-full bg-gold-400 border-2 border-white flex items-center justify-center -mx-1 text-[8px] text-white">⚖️</div>
+                </div>
+                {/* After Side */}
+                <div className="w-1/2 h-full relative overflow-hidden group">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=350" alt="Pores After" referrerPolicy="no-referrer" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute top-3 right-3 bg-green-700/90 text-white font-bold text-[9px] px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md z-10 border border-white/10">بعد 15 يوماً</div>
+                </div>
+              </div>
+              <div className="p-6 md:p-8 space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#092B21]"></span>
+                  <h3 className="text-base font-black text-[#092B21]">موازنة الدهون والمكياج مع تضييق المسام</h3>
+                </div>
+                <p className="text-xs text-[#7A746E] leading-relaxed">
+                  بمساعدة ساليسيليك الطين الطبيعي المنظف، تمت تصفية البشرة بالكامل من الرؤوس السوداء وتنظيم الإفرازات الدهنية، مما تسبب بإنهاء لمعان البشرة المزعج وإعادة مرونتها وصقل ملمسها.
+                </p>
+                <div className="flex items-center gap-1.5 pt-2 border-t border-neutral-100">
+                  <div className="text-[10px] bg-gold-100 text-[#aa843f] px-2.5 py-1 rounded-md font-bold">المنتج: غسول الطحالب + كريم الذهب</div>
+                  <div className="text-[10px] bg-neutral-100 text-[#736D67] px-2.5 py-1 rounded-md">الحالة: بشرة دهنية ومعرضة للبثور</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Case 3 */}
+            <div className="glass-card-light overflow-hidden rounded-[2rem] border border-gold-300/20 shadow-xl flex flex-col group hover:shadow-2xl transition-all duration-500">
+              <div className="relative h-64 overflow-hidden flex">
+                {/* Before Side */}
+                <div className="w-1/2 h-full relative overflow-hidden group">
+                  <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&q=80&w=350" alt="Lashes Before" referrerPolicy="no-referrer" className="w-full h-full object-cover filter saturate-0 opacity-90 transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute top-3 left-3 bg-red-650/90 text-white font-bold text-[9px] px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md z-10 border border-white/10">قبل الاستخدام</div>
+                </div>
+                {/* Divide Bar */}
+                <div className="w-1 h-full bg-gold-300/40 relative z-20 flex items-center justify-center">
+                  <div className="w-4 h-4 rounded-full bg-gold-400 border-2 border-white flex items-center justify-center -mx-1 text-[8px] text-white">⚖️</div>
+                </div>
+                {/* After Side */}
+                <div className="w-1/2 h-full relative overflow-hidden group">
+                  <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&q=80&w=350" alt="Lashes After" referrerPolicy="no-referrer" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <div className="absolute top-3 right-3 bg-green-700/90 text-white font-bold text-[9px] px-2.5 py-1 rounded-full uppercase tracking-wider backdrop-blur-md z-10 border border-white/10">بعد 15 يوماً</div>
+                </div>
+              </div>
+              <div className="p-6 md:p-8 space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-[#092B21]"></span>
+                  <h3 className="text-base font-black text-[#092B21]">إنبات وتطويل الرموش وتكثيف الفراغات</h3>
+                </div>
+                <p className="text-xs text-[#7A746E] leading-relaxed">
+                  تنشيط فائق للبصيلات الخاملة وزيادة في سماكة وطول الرمش وحواجب العين بمركب البيوتين السريري دون التسبب بأي عوارض أو صغار في الجلد المحيط.
+                </p>
+                <div className="flex items-center gap-1.5 pt-2 border-t border-neutral-100">
+                  <div className="text-[10px] bg-gold-100 text-[#aa843f] px-2.5 py-1 rounded-md font-bold">المنتج: سيروم الرموش Eyeluxe</div>
+                  <div className="text-[10px] bg-neutral-100 text-[#736D67] px-2.5 py-1 rounded-md">الحالة: تضرر الرموش بفعل الميك آب</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Luxury CTA invitation */}
+          <div className="mt-14 text-center">
+            <button
+              onClick={scrollToCheckout}
+              className="inline-flex items-center gap-2 bg-[#092B21] hover:bg-[#092B21]/90 text-white font-sans font-black px-8 py-4 rounded-xl text-xs sm:text-sm cursor-pointer shadow-lg active:scale-95 transition-all"
+            >
+              <ShoppingBag className="w-4 h-4 text-gold-300" />
+              <span>ابدئي رحلتكِ الخاصة لبشرة مثالية اليوم</span>
+            </button>
           </div>
 
         </div>
@@ -3363,6 +3450,31 @@ export default function App() {
             </div>
 
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Sticky Mobile Quick-Purchase Bar */}
+      <AnimatePresence>
+        {showStickyCta && (
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 50 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+            className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-white/95 backdrop-blur-xl border-t border-gold-300/30 shadow-[0_-8px_30px_rgba(9,43,33,0.15)] flex items-center justify-between gap-4 md:hidden pb-5"
+          >
+            <div className="text-right">
+              <span className="text-[10px] text-gold-600 font-extrabold uppercase tracking-wider block font-mono">عرض الـ 15 يوماً الحصري</span>
+              <span className="text-xs font-black text-[#092B21] block">البكج الكامل + واقي شمس مجاني 🎁</span>
+            </div>
+            <button
+              onClick={scrollToCheckout}
+              className="glass-btn-gold px-5 py-3 rounded-xl text-xs font-black text-[#092B21] shadow-lg animate-pulse flex items-center gap-1.5 cursor-pointer active:scale-95"
+            >
+              <ShoppingBag className="w-4 h-4 text-[#092B21]" />
+              <span>ابدئي روتينكِ اليوم 🏁</span>
+            </button>
+          </motion.div>
         )}
       </AnimatePresence>
 
