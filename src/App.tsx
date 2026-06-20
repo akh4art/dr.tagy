@@ -67,6 +67,30 @@ export default function App() {
   });
   const [activeReviewIndex, setActiveReviewIndex] = useState<number>(0);
 
+  // Touch Swipe Gesture support for testimonials card on mobile
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 40;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    const total = mockReviewSlides.length + uploadedReviews.length;
+    if (isLeftSwipe) {
+      setActiveReviewIndex(prev => (prev + 1) % total);
+    } else if (isRightSwipe) {
+      setActiveReviewIndex(prev => (prev - 1 + total) % total);
+    }
+  };
+
   const mockReviewSlides = [
     {
       id: 'mock-1',
@@ -146,6 +170,242 @@ export default function App() {
       localStorage.setItem('dr_tagy_uploaded_reviews', JSON.stringify(newUploaded));
       setActiveReviewIndex(prev => Math.max(0, Math.min(prev, newUploaded.length + mockReviewSlides.length - 1)));
     }
+  };
+
+  const renderTestimonialsCard = () => {
+    return (
+      <div 
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        className="relative glass-card-light p-5 md:p-6 rounded-[2rem] shadow-2xl !border-gold-300/35 max-w-[420px] w-full flex flex-col justify-between overflow-hidden cursor-grab active:cursor-grabbing mx-auto" 
+        id="hero-package-display-content"
+      >
+        
+        {/* Dynamic status/ribbon header badge */}
+        <div className="absolute -top-3.5 -right-3.5 bg-gradient-to-r from-[#092B21] to-[#1a5141] text-white text-[9px] font-black px-4.5 py-1.5 rounded-full shadow-md select-none flex items-center gap-1 border border-gold-400/20 z-10" dir="rtl">
+          <Sparkles className="w-3 h-3 text-gold-300 shrink-0" />
+          <span>أحدث تجارب العميلات والاعتمادات الرسمية 🏆</span>
+        </div>
+
+        {/* Slider content view */}
+        <div className="min-h-[350px] flex flex-col justify-between group mt-3">
+          <AnimatePresence mode="wait">
+            {(() => {
+              const totalSlides = mockReviewSlides.length + uploadedReviews.length;
+              // Guard active index
+              const safeIndex = activeReviewIndex % totalSlides;
+              const isUploaded = safeIndex >= mockReviewSlides.length;
+              const currentSlide = isUploaded
+                ? { id: `uploaded-${safeIndex}`, type: 'uploaded' as const, imageUrl: uploadedReviews[safeIndex - mockReviewSlides.length] }
+                : mockReviewSlides[safeIndex];
+
+              return (
+                <motion.div
+                  key={safeIndex}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex-grow flex flex-col justify-between"
+                >
+                  {/* 1. MOCK WHATSAPP SCREEN VIEW */}
+                  {currentSlide.type === 'whatsapp' && 'chatBubbles' in currentSlide && (
+                    <div className="bg-[#efeae2] rounded-2xl border border-neutral-200 overflow-hidden shadow-inner flex flex-col h-[300px]">
+                      {/* WhatsApp Simulated Header Bar */}
+                      <div className="bg-[#075E54] text-white px-3 py-2.5 flex items-center justify-between shadow-sm shrink-0">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-gold-500/20 text-gold-200 flex items-center justify-center font-black text-xs border border-gold-400/30">
+                            {currentSlide.avatarLetter}
+                          </div>
+                          <div className="text-right leading-none">
+                            <span className="text-[11px] font-black block">{currentSlide.sender}</span>
+                            <span className="text-[8px] text-green-300 font-medium block mt-0.5">متصل الآن • تجربة مؤكدة ✅</span>
+                          </div>
+                        </div>
+                        <div className="flex gap-2.5 items-center opacity-80 text-white">
+                          <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
+                          <MessageSquare className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                      
+                      {/* Conversations message stream body */}
+                      <div className="p-3 overflow-y-auto space-y-2.5 flex-grow text-[11px] scrollbar-thin select-none">
+                        {currentSlide.chatBubbles.map((bubble, bIdx) => {
+                          const isClient = bubble.sender === 'client';
+                          return (
+                            <div 
+                              key={bIdx}
+                              className={`flex w-full ${isClient ? 'justify-start' : 'justify-end'}`}
+                            >
+                              <div 
+                                className={`max-w-[85%] p-2.5 rounded-xl text-right relative shadow-[0_1px_2px_rgba(0,0,0,0.05)] ${
+                                  isClient 
+                                    ? 'bg-white text-[#202020] rounded-tr-none' 
+                                    : 'bg-[#d9fdd3] text-[#202020] rounded-tl-none'
+                                }`}
+                              >
+                                <p className="leading-relaxed font-normal">{bubble.text}</p>
+                                <span className="text-[8px] text-gray-400 block text-left mt-1 font-sans leading-none">{bubble.time}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 2. MOCK MEDICAL CERTIFICATE VIEW */}
+                  {currentSlide.type === 'certificate' && 'title' in currentSlide && (
+                    <div className="bg-gradient-to-br from-[#FAF8F5] via-white to-[#F6F1EA] rounded-2xl border-2 border-double border-gold-400/40 p-4 shadow-md flex flex-col justify-between h-[300px] text-center relative overflow-hidden select-none" dir="rtl">
+                      {/* Watermark logo decoration */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gold-500/5 rotate-12 pointer-events-none scale-150">
+                        <Award className="w-32 h-32" />
+                      </div>
+
+                      <div className="space-y-2.5 shrink-0">
+                        <div className="flex justify-between items-center text-[8px] text-gold-700 font-mono">
+                          <span>الرقم: {currentSlide.certNo}</span>
+                          <Award className="w-4 h-4 text-gold-500" />
+                          <span>التاريخ: ٢٠٢٦/٠٣</span>
+                        </div>
+                        <h4 className="text-xs font-black text-gold-700 font-sans tracking-wide">{currentSlide.title}</h4>
+                        <p className="text-[10px] text-neutral-400 leading-none">{currentSlide.authority}</p>
+                      </div>
+
+                      <p className="text-[10px] text-neutral-700 leading-relaxed font-light py-2 text-justify px-2 h-[135px] overflow-y-auto">
+                        "{currentSlide.text}"
+                      </p>
+
+                      <div className="border-t border-gold-300/20 pt-2.5 flex justify-between items-center shrink-0">
+                        <div className="flex gap-1">
+                          {currentSlide.stamps.map((stamp, sIdx) => (
+                            <span key={sIdx} className="text-[8px] bg-gold-200/10 border border-gold-300/25 text-gold-800 px-1.5 py-0.5 rounded">
+                              {stamp}
+                            </span>
+                          ))}
+                        </div>
+                        <span className="text-[8px] text-neutral-500 font-semibold italic">رؤية طبية سريرية 🩺</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 3. UPLOADED CUSTOM REVIEWS VIEW */}
+                  {currentSlide.type === 'uploaded' && 'imageUrl' in currentSlide && (
+                    <div className="bg-neutral-50 rounded-2xl border border-neutral-200 overflow-hidden shadow-inner flex flex-col justify-center items-center h-[300px] relative">
+                      {currentSlide.imageUrl ? (
+                        <img 
+                          src={currentSlide.imageUrl} 
+                          alt="تجربة عميلة معدلة" 
+                          className="w-full h-full object-contain"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className="text-center p-6 space-y-2 text-neutral-400">
+                          <Camera className="w-8 h-8 mx-auto stroke-1" />
+                          <span className="text-xs block">الصورة المرفوعة تظهر هنا</span>
+                        </div>
+                      )}
+
+                      {/* Option to delete uploaded image */}
+                      <button
+                        onClick={() => handleReviewDelete(safeIndex)}
+                        className="absolute bottom-3 left-3 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
+                        title="حذف هذه التجربة المرفوعة"
+                        id="btn-delete-custom-review"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })()}
+          </AnimatePresence>
+
+          {/* Pricing / Promo Banner below showcase */}
+          <div className="bg-[#092B21] p-3.5 rounded-xl border border-gold-400/20 flex items-center justify-between text-white shadow-inner mt-4" dir="rtl">
+            <div className="text-right">
+              <span className="text-[9px] text-[#A6CDC1] block font-sans">مجموعة دكتور تاجي (4 عبوات)</span>
+              <span className="text-[10px] text-neutral-400 font-serif line-through font-light leading-none">2700 TL</span>
+            </div>
+            <div className="space-y-0.5 text-left">
+              <span className="text-[8px] text-gold-300 font-black bg-[#124939] px-2 py-0.5 rounded block">وفرتِ 650 ليرة تركية</span>
+              <span className="text-md font-black text-white block leading-none">2050 TL</span>
+            </div>
+          </div>
+
+          {/* Swipe instruction hint for mobile */}
+          <div className="text-center mt-2 block lg:hidden select-none">
+            <span className="text-[9px] text-[#092B21]/70 font-bold">💡 اسحبي لليمين أو اليسار لرؤية باقي التجارب</span>
+          </div>
+
+          {/* Navigation controls & Image adding */}
+          <div className="flex items-center justify-between gap-3 mt-4.5" dir="rtl">
+            
+            {/* Slider controls arrow keys */}
+            <div className="flex gap-1.5 items-center justify-start">
+              <button
+                onClick={() => {
+                  const total = mockReviewSlides.length + uploadedReviews.length;
+                  setActiveReviewIndex(prev => (prev - 1 + total) % total);
+                }}
+                className="w-8 h-8 rounded-full border border-gold-300 bg-white hover:bg-gold-50 text-[#092B21] flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-90"
+                id="btn-prev-review-content"
+                title="المراجعة السابقة"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+              
+              {/* Tiny dots indicator */}
+              <div className="flex gap-1 px-1">
+                {Array.from({ length: mockReviewSlides.length + uploadedReviews.length }).map((_, dIdx) => (
+                  <button
+                    key={dIdx}
+                    onClick={() => setActiveReviewIndex(dIdx)}
+                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                      activeReviewIndex === dIdx ? 'bg-gold-500 w-3.5' : 'bg-gold-300/40'
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  const total = mockReviewSlides.length + uploadedReviews.length;
+                  setActiveReviewIndex(prev => (prev + 1) % total);
+                }}
+                className="w-8 h-8 rounded-full border border-gold-300 bg-white hover:bg-gold-50 text-[#092B21] flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-90"
+                id="btn-next-review-content"
+                title="المراجعة التالية"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Add Experience Image Action */}
+            <div>
+              <label 
+                className="bg-[#092B21] hover:bg-gold-500 text-white hover:text-[#092B21] text-[10px] font-black px-3.5 py-2.5 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer flex items-center gap-1.5"
+                id="btn-upload-review-image-content"
+              >
+                <Upload className="w-3 h-3 text-gold-400" />
+                <span>إضافة تجربة مصورة 📸</span>
+                <input 
+                  type="file" 
+                  accept="image/*" 
+                  onChange={handleReviewUpload} 
+                  className="hidden" 
+                />
+              </label>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    );
   };
   
   // Checkout Form States
@@ -1400,11 +1660,11 @@ export default function App() {
       </div>
 
       {/* 3. HERO & BEAUTY GOAL SELECTOR SECTION */}
-      <section className="relative py-16 lg:py-28 px-6 md:px-12 lg:px-24 overflow-hidden min-h-[90vh] flex items-center bg-[#092B21] isolate">
+      <section className="relative py-10 lg:py-28 px-6 md:px-12 lg:px-24 overflow-hidden min-h-[75vh] lg:min-h-[90vh] flex items-center bg-[#092B21] isolate">
         {/* Aesthetic Background Video Loop */}
         <HeroVideoBackground />
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 w-full">
           
           {/* Right Column: Catchy luxury typography and offer details */}
           <div className="lg:col-span-7 space-y-8 text-center lg:text-right relative z-10">
@@ -1426,7 +1686,7 @@ export default function App() {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3 relative z-20">
               <button
                 onClick={scrollToCheckout}
-                className="w-full sm:w-auto glass-btn-gold liquid-sheen text-[#092B21] font-sans font-black px-8.5 py-4.5 rounded-xl text-md cursor-pointer flex items-center justify-center gap-2.5 shadow-xl hover:shadow-2xl active:scale-95 transition-all animate-pulse"
+                className="w-full sm:w-auto glass-btn-gold text-[#092B21] font-sans font-black px-8.5 py-4.5 rounded-xl text-md cursor-pointer flex items-center justify-center gap-2.5 shadow-xl hover:shadow-2xl active:scale-95 transition-all"
                 id="hero-cta-btn"
               >
                 <ShoppingBag className="w-5 h-5 text-[#092B21]" />
@@ -1468,236 +1728,23 @@ export default function App() {
           </div>
 
           {/* Left Column: Glassmorphic interactive visual card displaying the bundle stack */}
-          <div className="lg:col-span-5 relative flex items-center justify-center mt-6 lg:mt-0">
+          <div className="lg:col-span-5 relative hidden lg:flex items-center justify-center lg:mt-0">
             <div className="absolute inset-0 bg-gradient-to-tr from-gold-100/10 via-gold-200/5 to-transparent rounded-full filter blur-[80px]"></div>
-            
-            {/* Glowing ring borders */}
-            <div className="absolute w-[380px] h-[380px] border border-gold-300/15 rounded-full -z-10 animate-spin-slow"></div>
-
-            {/* Luxury Dynamic WhatsApp Chat & Client Testimonials Showcase Card */}
-            <div className="relative glass-card-light liquid-sheen p-5 md:p-6 rounded-[2rem] shadow-2xl !border-gold-300/30 max-w-[420px] w-full flex flex-col justify-between overflow-hidden" id="hero-package-display">
-              
-              {/* Dynamic status/ribbon header badge */}
-              <div className="absolute -top-3.5 -right-3.5 bg-gradient-to-r from-[#092B21] to-[#1a5141] text-white text-[9px] font-black px-4.5 py-1.5 rounded-full shadow-md select-none flex items-center gap-1 border border-gold-400/20 z-10">
-                <Sparkles className="w-3 h-3 text-gold-300 shrink-0" />
-                <span>أحدث تجارب العميلات والاعتمادات الرسمية 🏆</span>
-              </div>
-
-              {/* Slider content view */}
-              <div className="min-h-[350px] flex flex-col justify-between group mt-3">
-                <AnimatePresence mode="wait">
-                  {(() => {
-                    const totalSlides = mockReviewSlides.length + uploadedReviews.length;
-                    // Guard active index
-                    const safeIndex = activeReviewIndex % totalSlides;
-                    const isUploaded = safeIndex >= mockReviewSlides.length;
-                    const currentSlide = isUploaded
-                      ? { id: `uploaded-${safeIndex}`, type: 'uploaded' as const, imageUrl: uploadedReviews[safeIndex - mockReviewSlides.length] }
-                      : mockReviewSlides[safeIndex];
-
-                    return (
-                      <motion.div
-                        key={safeIndex}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.3 }}
-                        className="flex-grow flex flex-col justify-between"
-                      >
-                        {/* 1. MOCK WHATSAPP SCREEN VIEW */}
-                        {currentSlide.type === 'whatsapp' && 'chatBubbles' in currentSlide && (
-                          <div className="bg-[#efeae2] rounded-2xl border border-neutral-200 overflow-hidden shadow-inner flex flex-col h-[300px]">
-                            {/* WhatsApp Simulated Header Bar */}
-                            <div className="bg-[#075E54] text-white px-3 py-2.5 flex items-center justify-between shadow-sm shrink-0">
-                              <div className="flex items-center gap-2">
-                                <div className="w-8 h-8 rounded-full bg-gold-500/20 text-gold-200 flex items-center justify-center font-black text-xs border border-gold-400/30">
-                                  {currentSlide.avatarLetter}
-                                </div>
-                                <div className="text-right leading-none">
-                                  <span className="text-[11px] font-black block">{currentSlide.sender}</span>
-                                  <span className="text-[8px] text-green-300 font-medium block mt-0.5">متصل الآن • تجربة مؤكدة ✅</span>
-                                </div>
-                              </div>
-                              <div className="flex gap-2.5 items-center opacity-80 text-white">
-                                <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
-                                <MessageSquare className="w-3.5 h-3.5" />
-                              </div>
-                            </div>
-                            
-                            {/* Conversations message stream body */}
-                            <div className="p-3 overflow-y-auto space-y-2.5 flex-grow text-[11px] scrollbar-thin select-none">
-                              {currentSlide.chatBubbles.map((bubble, bIdx) => {
-                                const isClient = bubble.sender === 'client';
-                                return (
-                                  <div 
-                                    key={bIdx}
-                                    className={`flex w-full ${isClient ? 'justify-start' : 'justify-end'}`}
-                                  >
-                                    <div 
-                                      className={`max-w-[85%] p-2.5 rounded-xl text-right relative shadow-[0_1px_2px_rgba(0,0,0,0.05)] ${
-                                        isClient 
-                                          ? 'bg-white text-[#202020] rounded-tr-none' 
-                                          : 'bg-[#d9fdd3] text-[#202020] rounded-tl-none'
-                                      }`}
-                                    >
-                                      <p className="leading-relaxed font-normal">{bubble.text}</p>
-                                      <span className="text-[8px] text-gray-400 block text-left mt-1 font-sans leading-none">{bubble.time}</span>
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* 2. MOCK MEDICAL CERTIFICATE VIEW */}
-                        {currentSlide.type === 'certificate' && 'title' in currentSlide && (
-                          <div className="bg-gradient-to-br from-[#FAF8F5] via-white to-[#F6F1EA] rounded-2xl border-2 border-double border-gold-400/40 p-4 shadow-md flex flex-col justify-between h-[300px] text-center relative overflow-hidden select-none">
-                            {/* Watermark logo decoration */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gold-500/5 rotate-12 pointer-events-none scale-150">
-                              <Award className="w-32 h-32" />
-                            </div>
-
-                            <div className="space-y-2.5 shrink-0">
-                              <div className="flex justify-between items-center text-[8px] text-gold-700 font-mono">
-                                <span>الرقم: {currentSlide.certNo}</span>
-                                <Award className="w-4 h-4 text-gold-500" />
-                                <span>التاريخ: ٢٠٢٦/٠٣</span>
-                              </div>
-                              <h4 className="text-xs font-black text-gold-700 font-sans tracking-wide">{currentSlide.title}</h4>
-                              <p className="text-[10px] text-neutral-400 leading-none">{currentSlide.authority}</p>
-                            </div>
-
-                            <p className="text-[10px] text-neutral-700 leading-relaxed font-light py-2 text-justify px-2 h-[135px] overflow-y-auto">
-                              "{currentSlide.text}"
-                            </p>
-
-                            <div className="border-t border-gold-300/20 pt-2.5 flex justify-between items-center shrink-0">
-                              <div className="flex gap-1">
-                                {currentSlide.stamps.map((stamp, sIdx) => (
-                                  <span key={sIdx} className="text-[8px] bg-gold-200/10 border border-gold-300/25 text-gold-800 px-1.5 py-0.5 rounded">
-                                    {stamp}
-                                  </span>
-                                ))}
-                              </div>
-                              <span className="text-[8px] text-neutral-500 font-semibold italic">رؤية طبية سريرية 🩺</span>
-                            </div>
-                          </div>
-                        )}
-
-                        {/* 3. UPLOADED CUSTOM REVIEWS VIEW */}
-                        {currentSlide.type === 'uploaded' && 'imageUrl' in currentSlide && (
-                          <div className="bg-neutral-50 rounded-2xl border border-neutral-200 overflow-hidden shadow-inner flex flex-col justify-center items-center h-[300px] relative">
-                            {currentSlide.imageUrl ? (
-                              <img 
-                                src={currentSlide.imageUrl} 
-                                alt="تجربة عميلة معدلة" 
-                                className="w-full h-full object-contain"
-                                referrerPolicy="no-referrer"
-                              />
-                            ) : (
-                              <div className="text-center p-6 space-y-2 text-neutral-400">
-                                <Camera className="w-8 h-8 mx-auto stroke-1" />
-                                <span className="text-xs block">الصورة المرفوعة تظهر هنا</span>
-                              </div>
-                            )}
-
-                            {/* Option to delete uploaded image */}
-                            <button
-                              onClick={() => handleReviewDelete(safeIndex)}
-                              className="absolute bottom-3 left-3 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
-                              title="حذف هذه التجربة المرفوعة"
-                              id="btn-delete-custom-review"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
-                        )}
-                      </motion.div>
-                    );
-                  })()}
-                </AnimatePresence>
-
-                {/* Pricing / Promo Banner below showcase */}
-                <div className="bg-[#092B21] p-3.5 rounded-xl border border-gold-400/20 flex items-center justify-between text-white shadow-inner mt-4">
-                  <div className="text-right">
-                    <span className="text-[9px] text-[#A6CDC1] block">مجموعة دكتور تاجي (4 عبوات)</span>
-                    <span className="text-[10px] text-neutral-400 font-serif line-through font-light leading-none">2700 TL</span>
-                  </div>
-                  <div className="space-y-0.5 text-left">
-                    <span className="text-[8px] text-gold-300 font-black bg-[#124939] px-2 py-0.5 rounded block">وفرتِ 650 ليرة تركية</span>
-                    <span className="text-md font-black text-white block leading-none">2050 TL</span>
-                  </div>
-                </div>
-
-                {/* Navigation controls & Image adding */}
-                <div className="flex items-center justify-between gap-3 mt-4.5">
-                  
-                  {/* Slider controls arrow keys */}
-                  <div className="flex gap-1.5 items-center justify-start">
-                    <button
-                      onClick={() => {
-                        const total = mockReviewSlides.length + uploadedReviews.length;
-                        setActiveReviewIndex(prev => (prev - 1 + total) % total);
-                      }}
-                      className="w-8 h-8 rounded-full border border-gold-300 bg-white hover:bg-gold-50 text-[#092B21] flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-90"
-                      id="btn-prev-review"
-                      title="المراجعة السابقة"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                    
-                    {/* Tiny dots indicator */}
-                    <div className="flex gap-1 px-1">
-                      {Array.from({ length: mockReviewSlides.length + uploadedReviews.length }).map((_, dIdx) => (
-                        <button
-                          key={dIdx}
-                          onClick={() => setActiveReviewIndex(dIdx)}
-                          className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                            activeReviewIndex === dIdx ? 'bg-gold-500 w-3.5' : 'bg-gold-300/40'
-                          }`}
-                        />
-                      ))}
-                    </div>
-
-                    <button
-                      onClick={() => {
-                        const total = mockReviewSlides.length + uploadedReviews.length;
-                        setActiveReviewIndex(prev => (prev + 1) % total);
-                      }}
-                      className="w-8 h-8 rounded-full border border-gold-300 bg-white hover:bg-gold-50 text-[#092B21] flex items-center justify-center transition-all cursor-pointer shadow-sm active:scale-90"
-                      id="btn-next-review"
-                      title="المراجعة التالية"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  {/* Add Experience Image Action */}
-                  <div>
-                    <label 
-                      className="bg-[#092B21] hover:bg-gold-500 text-white hover:text-[#092B21] text-[10px] font-black px-3.5 py-2.5 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer flex items-center gap-1.5"
-                      id="btn-upload-review-image"
-                    >
-                      <Upload className="w-3 h-3 text-gold-400" />
-                      <span>إضافة تجربة مصورة 📸</span>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        onChange={handleReviewUpload} 
-                        className="hidden" 
-                      />
-                    </label>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-
+            {renderTestimonialsCard()}
           </div>
 
+        </div>
+      </section>
+
+      {/* Testimonials section below hero for mobile/tablet only */}
+      <section className="block lg:hidden py-12 px-6 bg-[#092B21] border-b border-gold-400/10">
+        <div className="max-w-md mx-auto space-y-6">
+          <div className="text-center space-y-2">
+            <span className="text-xs font-bold text-gold-300 uppercase tracking-wider block">تجربة فريدة وموثقة</span>
+            <h2 className="text-xl font-black text-white">آراء وتجارب عملائنا </h2>
+            <div className="w-12 h-1 bg-gold-400 mx-auto rounded-full"></div>
+          </div>
+          {renderTestimonialsCard()}
         </div>
       </section>
 

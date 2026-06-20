@@ -49,7 +49,7 @@ export default function HeroVideoBackground() {
           muted
           playsInline
           onLoadedData={() => setVideoLoaded(true)}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+          className={`absolute inset-0 w-full h-full object-cover object-[center_35%] md:object-center transition-opacity duration-1000 ${
             videoLoaded ? 'opacity-100' : 'opacity-0'
           }`}
           style={{ objectFit: 'cover' }}
@@ -90,12 +90,9 @@ export default function HeroVideoBackground() {
 
       {/* Luxury green & gold frosted glass overlay gradient to make Arabic text extremely sharp and highly legible */}
       <div 
-        className="absolute inset-0 bg-gradient-to-b from-[#092B21]/60 via-[#092B21]/45 to-[#092B21]/70 backdrop-blur-[0.5px] z-0" 
+        className="absolute inset-0 bg-gradient-to-b from-[#092B21]/60 via-[#092B21]/45 to-[#092B21]/70 z-0" 
         style={{ contentVisibility: 'auto' }}
       ></div>
-
-      {/* Elegant gold decorative ring spinning very slowly for clinical luxury vibes */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-gold-300/5 rounded-full animate-spin-very-slow pointer-events-none z-0"></div>
     </div>
   );
 }
