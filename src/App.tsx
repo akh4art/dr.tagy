@@ -94,55 +94,27 @@ export default function App() {
   const mockReviewSlides = [
     {
       id: 'mock-1',
-      type: 'whatsapp' as const,
-      sender: 'مريم العتيبي (عميلة موثقة)',
-      time: '11:42 ص',
-      avatarLetter: 'م',
-      chatBubbles: [
-        {
-          text: 'السلام عليكم دكتورة، حبيت أشكر دكتور تاجي من كل قلبي على البكج المتكامل 😭❤️ بشرتي تغيرت 180 درجة وصارت ممتلئة وفيها نضارة تجنن.. حتى الخطوط حول شفايفي خفت حيل وصديقاتي يسألوني وش مسوية!',
-          sender: 'client',
-          time: '11:40 ص'
-        },
-        {
-          text: 'أهلاً بكِ عزيزتي مريم، يسعدنا جداً سماع هذه النتائج المذهلة! ببتيدات الذهب دقيقة التأثير في كريم 6 في 1 تعمل بتناغم لتسريع التجديد الطبيعي. استمري على الروتين لتحافظي على هذه الرطوبة الفائقة ✨',
-          sender: 'support',
-          time: '11:41 ص'
-        },
-        {
-          text: 'أكيد مستمرة، وواقي الشمس اللي مع البكج هدية خياااال وخفيف للميك أب.. الله يسعدكم على هالتركيبة الفخمة 🙏🏼',
-          sender: 'client',
-          time: '11:42 ص'
-        }
-      ]
+      type: 'image' as const,
+      imageUrl: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&q=80&w=600',
+      caption: 'نضارة وتوهج طبيعي متكامل للبشرة بعد 15 يوماً من الاستخدام ✨'
     },
     {
       id: 'mock-2',
-      type: 'certificate' as const,
-      title: 'شهادة مطابقة وتوصية علمية',
-      certNo: 'TR-DRT-90823',
-      authority: 'جمعية الجلدية والتجميل لجامعة إيجة التركية',
-      stamps: ['مُصادق عليه كيميائياً 🔬', 'ببتيدات ذهب نقية 🏆', 'أمان سريري 100% 🩺'],
-      text: 'بناءً على الفحوصات الطبية وعينات الفحص السريري المعتمدة، نؤكد أن روتين دكتور تاجي (Dr. Tagy Skin Routine) بما يحتويه من ببتيدات كولاجين الذهب والبيوتين المزدوج وغسول الطحالب الزرقاء يعيد بناء ألياف البشرة طبيعياً ويعد آمناً وخالياً بالكامل من البارابين والزيوت المفرطة وموصى به لعلاج تصبغات وتجاعيد الوجه والرقبة.'
+      type: 'image' as const,
+      imageUrl: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=600',
+      caption: 'توصيات واعتمادات كبار أخصائيي الجلدية والعيادات التجميلية في تركيا 🏥'
     },
     {
       id: 'mock-3',
-      type: 'whatsapp' as const,
-      sender: 'فاطمة الحربي (عميلة موثقة)',
-      time: '04:15 م',
-      avatarLetter: 'ف',
-      chatBubbles: [
-        {
-          text: 'هلا حبيبتي طلبت البكج المتكامل عشان سيروم الرموش وغسول الطحالب الشافي، والله العظيم رموشي صارت كثيفة وطويلة والكل يسألني وش مسوية لرموشك! 😍',
-          sender: 'client',
-          time: '04:12 م'
-        },
-        {
-          text: 'يا هلا بكِ يا غالية! مركب البيوتين المزدوج العضوي يغذي البصيلات من الجذور. تتهنين بالجمال الطبيعي الفاتن 🌸',
-          sender: 'support',
-          time: '04:14 م'
-        }
-      ]
+      type: 'image' as const,
+      imageUrl: 'https://images.unsplash.com/photo-1608248597481-496100c8c836?auto=format&fit=crop&q=80&w=600',
+      caption: 'ببتيدات الذهب المزدوجة لتغذية حاجز البشرة الطبيعي وشد فوري 🏆'
+    },
+    {
+      id: 'mock-4',
+      type: 'image' as const,
+      imageUrl: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?auto=format&fit=crop&q=80&w=600',
+      caption: 'فحص سريري في المعامل يثبت أمان الفعالية والملاءمة للبشرة الحساسة 🔬'
     }
   ];
 
@@ -209,115 +181,42 @@ export default function App() {
                   transition={{ duration: 0.3 }}
                   className="flex-grow flex flex-col justify-between"
                 >
-                  {/* 1. MOCK WHATSAPP SCREEN VIEW */}
-                  {currentSlide.type === 'whatsapp' && 'chatBubbles' in currentSlide && (
-                    <div className="bg-[#efeae2] rounded-2xl border border-neutral-200 overflow-hidden shadow-inner flex flex-col h-[300px]">
-                      {/* WhatsApp Simulated Header Bar */}
-                      <div className="bg-[#075E54] text-white px-3 py-2.5 flex items-center justify-between shadow-sm shrink-0">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-full bg-gold-500/20 text-gold-200 flex items-center justify-center font-black text-xs border border-gold-400/30">
-                            {currentSlide.avatarLetter}
-                          </div>
-                          <div className="text-right leading-none">
-                            <span className="text-[11px] font-black block">{currentSlide.sender}</span>
-                            <span className="text-[8px] text-green-300 font-medium block mt-0.5">متصل الآن • تجربة مؤكدة ✅</span>
-                          </div>
-                        </div>
-                        <div className="flex gap-2.5 items-center opacity-80 text-white">
-                          <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
-                          <MessageSquare className="w-3.5 h-3.5" />
-                        </div>
-                      </div>
-                      
-                      {/* Conversations message stream body */}
-                      <div className="p-3 overflow-y-auto space-y-2.5 flex-grow text-[11px] scrollbar-thin select-none">
-                        {currentSlide.chatBubbles.map((bubble, bIdx) => {
-                          const isClient = bubble.sender === 'client';
-                          return (
-                            <div 
-                              key={bIdx}
-                              className={`flex w-full ${isClient ? 'justify-start' : 'justify-end'}`}
-                            >
-                              <div 
-                                className={`max-w-[85%] p-2.5 rounded-xl text-right relative shadow-[0_1px_2px_rgba(0,0,0,0.05)] ${
-                                  isClient 
-                                    ? 'bg-white text-[#202020] rounded-tr-none' 
-                                    : 'bg-[#d9fdd3] text-[#202020] rounded-tl-none'
-                                }`}
-                              >
-                                <p className="leading-relaxed font-normal">{bubble.text}</p>
-                                <span className="text-[8px] text-gray-400 block text-left mt-1 font-sans leading-none">{bubble.time}</span>
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* 2. MOCK MEDICAL CERTIFICATE VIEW */}
-                  {currentSlide.type === 'certificate' && 'title' in currentSlide && (
-                    <div className="bg-gradient-to-br from-[#FAF8F5] via-white to-[#F6F1EA] rounded-2xl border-2 border-double border-gold-400/40 p-4 shadow-md flex flex-col justify-between h-[300px] text-center relative overflow-hidden select-none" dir="rtl">
-                      {/* Watermark logo decoration */}
-                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-gold-500/5 rotate-12 pointer-events-none scale-150">
-                        <Award className="w-32 h-32" />
-                      </div>
-
-                      <div className="space-y-2.5 shrink-0">
-                        <div className="flex justify-between items-center text-[8px] text-gold-700 font-mono">
-                          <span>الرقم: {currentSlide.certNo}</span>
-                          <Award className="w-4 h-4 text-gold-500" />
-                          <span>التاريخ: ٢٠٢٦/٠٣</span>
-                        </div>
-                        <h4 className="text-xs font-black text-gold-700 font-sans tracking-wide">{currentSlide.title}</h4>
-                        <p className="text-[10px] text-neutral-400 leading-none">{currentSlide.authority}</p>
-                      </div>
-
-                      <p className="text-[10px] text-neutral-700 leading-relaxed font-light py-2 text-justify px-2 h-[135px] overflow-y-auto">
-                        "{currentSlide.text}"
-                      </p>
-
-                      <div className="border-t border-gold-300/20 pt-2.5 flex justify-between items-center shrink-0">
-                        <div className="flex gap-1">
-                          {currentSlide.stamps.map((stamp, sIdx) => (
-                            <span key={sIdx} className="text-[8px] bg-gold-200/10 border border-gold-300/25 text-gold-800 px-1.5 py-0.5 rounded">
-                              {stamp}
-                            </span>
-                          ))}
-                        </div>
-                        <span className="text-[8px] text-neutral-500 font-semibold italic">رؤية طبية سريرية 🩺</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* 3. UPLOADED CUSTOM REVIEWS VIEW */}
-                  {currentSlide.type === 'uploaded' && 'imageUrl' in currentSlide && (
-                    <div className="bg-neutral-50 rounded-2xl border border-neutral-200 overflow-hidden shadow-inner flex flex-col justify-center items-center h-[300px] relative">
-                      {currentSlide.imageUrl ? (
+                  <div className="bg-[#124939]/30 rounded-2xl border border-gold-400/20 overflow-hidden shadow-inner flex flex-col justify-center items-center h-[300px] relative">
+                    {currentSlide.imageUrl ? (
+                      <div className="w-full h-full relative">
                         <img 
                           src={currentSlide.imageUrl} 
-                          alt="تجربة عميلة معدلة" 
-                          className="w-full h-full object-contain"
+                          alt={('caption' in currentSlide && currentSlide.caption) || "تجربة مصورة من العميلات"} 
+                          className="w-full h-full object-cover rounded-2xl select-none"
                           referrerPolicy="no-referrer"
                         />
-                      ) : (
-                        <div className="text-center p-6 space-y-2 text-neutral-400">
-                          <Camera className="w-8 h-8 mx-auto stroke-1" />
-                          <span className="text-xs block">الصورة المرفوعة تظهر هنا</span>
+                        
+                        {/* Semi-transparent dark gold-tinted gradient text container at the bottom */}
+                        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pb-5 flex flex-col justify-end" dir="rtl">
+                          <p className="text-white text-[11px] sm:text-xs font-bold leading-relaxed text-right select-none shadow-sm">
+                            {('caption' in currentSlide && currentSlide.caption) || "تجربة مصورة موثقة من إحدى عميلات دكتور تاجي المتميزات ✨"}
+                          </p>
                         </div>
-                      )}
+                      </div>
+                    ) : (
+                      <div className="text-center p-6 space-y-2 text-neutral-400">
+                        <Camera className="w-8 h-8 mx-auto stroke-1" />
+                        <span className="text-xs block">الصورة المرفوعة تظهر هنا</span>
+                      </div>
+                    )}
 
-                      {/* Option to delete uploaded image */}
+                    {/* Option to delete uploaded image */}
+                    {currentSlide.type === 'uploaded' && (
                       <button
                         onClick={() => handleReviewDelete(safeIndex)}
-                        className="absolute bottom-3 left-3 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
+                        className="absolute bottom-3 left-3 bg-red-600 hover:bg-red-700 text-white p-2 rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95 z-20"
                         title="حذف هذه التجربة المرفوعة"
                         id="btn-delete-custom-review"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </motion.div>
               );
             })()}
