@@ -49,6 +49,7 @@ import {
 } from 'lucide-react';
 import { Product, Order } from './types';
 import { products, reviews, faqs } from './data';
+import HeroVideoBackground from './components/HeroVideoBackground';
 
 export default function App() {
   // Navigation & UI States
@@ -165,7 +166,50 @@ export default function App() {
 
   // Orders Admin Panel for review
   const [savedOrders, setSavedOrders] = useState<Order[]>([]);
-  const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
+  
+  // Custom SPA Router to make the control panel a separate page at '/orders'
+  const [currentPath, setCurrentPath] = useState<string>(() => {
+    const path = window.location.pathname;
+    if (path.includes('/orders') || window.location.hash.includes('orders') || window.location.search.includes('orders')) {
+      return '/orders';
+    }
+    return '/';
+  });
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const path = window.location.pathname;
+      if (path.includes('/orders') || window.location.hash.includes('orders') || window.location.search.includes('orders')) {
+        setCurrentPath('/orders');
+      } else {
+        setCurrentPath('/');
+      }
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
+  }, []);
+
+  const navigateTo = (path: string) => {
+    if (path === '/') {
+      window.history.pushState({}, '', '/');
+      setCurrentPath('/');
+    } else if (path === '/orders') {
+      window.history.pushState({}, '', '/orders');
+      setCurrentPath('/orders');
+    } else {
+      window.history.pushState({}, '', path);
+      setCurrentPath(path);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const showAdminPanel = currentPath === '/orders';
   const [showStickyCta, setShowStickyCta] = useState<boolean>(false);
 
   // Countdown timer state
@@ -700,7 +744,7 @@ export default function App() {
               </button>
 
               <button 
-                onClick={() => setShowAdminPanel(false)}
+                onClick={() => navigateTo('/')}
                 className="bg-gold-500 hover:bg-gold-600 text-[#092B21] font-black text-xs py-2.5 px-5 rounded-xl transition-all shadow-md shadow-black/10 flex items-center gap-1.5 cursor-pointer hover:scale-[1.01]"
                 id="close-admin-standalone-btn"
               >
@@ -1323,7 +1367,7 @@ export default function App() {
           <div className="flex items-center gap-2 justify-center">
             <Sparkles className="w-4 h-4 text-gold-300 shrink-0 animate-pulse" />
             <span className="font-extrabold text-gold-100 text-xs md:text-sm tracking-wide leading-relaxed">
-              ✨ عرض محدود اليوم: احصلي على واقي الشمس الطبي (SPF50) مجاناً بالكامل (بقيمة <span className="text-white font-mono underline decoration-gold-400">650 TL</span>) عند طلب المجموعة المتكاملة!
+               احصلي على واقي الشمس الطبي مجاناً بالكامل
             </span>
           </div>
           
@@ -1339,7 +1383,7 @@ export default function App() {
 
             {/* Quick Deluxe Reservations toggle */}
             <button 
-              onClick={() => setShowAdminPanel(!showAdminPanel)} 
+              onClick={() => navigateTo(showAdminPanel ? '/' : '/orders')} 
               className="p-1.5 bg-white/10 hover:bg-white/20 text-[#F7F2EA] hover:text-gold-300 rounded-full transition-all relative border border-white/10"
               title="حجوزاتكِ"
               id="orders-admin-btn"
@@ -1356,44 +1400,26 @@ export default function App() {
       </div>
 
       {/* 3. HERO & BEAUTY GOAL SELECTOR SECTION */}
-      <section className="relative py-16 lg:py-28 px-6 md:px-12 lg:px-24 overflow-hidden min-h-[90vh] flex items-center">
+      <section className="relative py-16 lg:py-28 px-6 md:px-12 lg:px-24 overflow-hidden min-h-[90vh] flex items-center bg-[#092B21] isolate">
         {/* Aesthetic Background Video Loop */}
-        <div className="absolute inset-0 -z-10 w-full h-full overflow-hidden">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover scale-102"
-          >
-            <source src="https://player.vimeo.com/external/414099238.hd.mp4?s=d0db584100fa1b6bd61019672fb5f989938b813b&profile_id=173&oauth2_token_id=57447761" type="video/mp4" />
-          </video>
-          {/* Glass Overlay of luxury dark green & gold blend */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#092B21]/92 via-[#092B21]/82 to-[#092B21]/94 backdrop-blur-[3px]"></div>
-          {/* Subtle slow spinning decorative rings for the luxury liquid vibe */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-gold-300/5 rounded-full animate-spin-very-slow pointer-events-none"></div>
-        </div>
+        <HeroVideoBackground />
 
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
           
           {/* Right Column: Catchy luxury typography and offer details */}
           <div className="lg:col-span-7 space-y-8 text-center lg:text-right relative z-10">
             
-            {/* Top clinical seal indicator */}
-            <div className="inline-flex items-center gap-2 glass-card-light !bg-white/10 !border-gold-300/20 px-4.5 py-2 rounded-full text-gold-300 text-xs font-black leading-none backdrop-blur-md">
-              <Sparkles className="w-4 h-4 text-gold-300 shrink-0" />
-              <span>من أعرق المختبرات الأوروبية للعناية الطبية بالبشرة</span>
-            </div>
+
 
             {/* Main title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.25]">
+            <h1 className="text-2xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.25]">
               تألقي ببشرة نضرة ومثالية خلال 15 يوماً <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-gold-200 to-gold-400 font-serif italic text-3xl md:text-4xl lg:text-5xl font-light block mt-2 text-right">الروتين الفاخر لتجديد حيوية وصحة بشرتك</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-gold-200 to-gold-400 font-serif italic text-3xl md:text-4xl lg:text-5xl font-light block mt-2 ">الروتين الفاخر <br /> لتجديد حيوية وصحة بشرتك</span>
             </h1>
 
             {/* Sub description */}
             <p className="text-sm md:text-lg text-[#F7F2EA]/90 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
-              روتين فاخر ومتكامل يدمج الفخامة بالحلول السريرية. تعمل المجموعة (من الخطوة 1 إلى 4) بتناغم تام (Synergy) لإعادة الحيوية والنضارة لبشرتك؛ حيث تمنحها امتلاءً فورياً وتغذي حاجز الجلد الطبيعي بالببتيدات الذهبية. اطلبي مجموعتك العلاجية اليوم واحصلي على واقي الشمس الطبي الفاخر مجاناً.
+              مجموعة متكاملة من المنتجات الطبيعية تعمل بتناغم لتمنحك تألقاً غير مسبوق
             </p>
 
             {/* Hero CTAs */}
@@ -1767,7 +1793,7 @@ export default function App() {
                   className="space-y-6 text-center"
                 >
                   <h4 className="text-sm md:text-base font-bold text-[#092B21]">الخطوة الأولى: ما هو طبيعة ملمس وطبيعة بشرتك الحالية؟</h4>
-                  <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
+                  <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
                     {[
                       { key: 'oily', title: 'دهنية أو مختلطة (لمعان وبثور)', desc: 'تحتاج إلى موازنة الإفرازات وتنقية عميقة.' },
                       { key: 'dry', title: 'جافة أو خشنة (قشور ومظهر باهت)', desc: 'تحتاج إلى ترطيب مكثف ودعم كولاجيني.' },
@@ -1800,7 +1826,7 @@ export default function App() {
                   className="space-y-6 text-center"
                 >
                   <h4 className="text-sm md:text-base font-bold text-[#092B21]">الخطوة الثانية: ما هي المعضلة الأهم المطلوب تغييرها الفتر الحالية للوجه؟</h4>
-                  <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto">
+                  <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
                     {[
                       { key: 'wrinkle', title: 'التجاعيد، التجاهيد، وخطوط حول الفم والوجه', desc: 'ببتيدات الذهب والكولاجين الثنائي' },
                       { key: 'oil-clens', title: 'المسام الواسعة وإفراز الدهون الزائد', desc: 'غسول الطحالب المنقي لعمق المسام' },
@@ -2412,7 +2438,7 @@ export default function App() {
                     <button
                       onClick={() => {
                         resetForm();
-                        setShowAdminPanel(true);
+                        navigateTo('/orders');
                       }}
                       className="bg-gold-100 hover:bg-gold-200 text-gold-900 font-bold px-6 py-3 rounded-xl text-xs transition-colors cursor-pointer"
                     >
@@ -2980,7 +3006,7 @@ export default function App() {
           <p className="opacity-60 text-[9px] font-light">تم تطبيقه بمقاييس الفخامة الطبية العالية لبروتوكول صفحات الهبوط فائقة التحول والتحسين التجميلي.</p>
           <div className="pt-2 flex justify-center">
             <button 
-              onClick={() => setShowAdminPanel(true)} 
+              onClick={() => navigateTo('/orders')} 
               className="px-4 py-2 bg-white/5 hover:bg-white/10 text-gold-300 text-[10px] uppercase tracking-wider font-extrabold rounded-lg border border-gold-400/20 transition-all flex items-center justify-center gap-1.5 cursor-pointer hover:border-gold-300"
               id="footer-admin-toggle-btn"
             >
@@ -3165,7 +3191,7 @@ export default function App() {
                 </div>
               </div>
               <button 
-                onClick={() => setShowAdminPanel(false)}
+                onClick={() => navigateTo('/')}
                 className="p-1.5 bg-white/10 hover:bg-white/20 rounded-full transition-colors text-white cursor-pointer"
               >
                 <X className="w-4.5 h-4.5" />
@@ -3442,7 +3468,7 @@ export default function App() {
                 شطب جميع الطلبات
               </button>
               <button 
-                onClick={() => setShowAdminPanel(false)}
+                onClick={() => navigateTo('/')}
                 className="bg-[#092B21] hover:bg-[#092B21]/90 text-white font-bold py-3 px-4 rounded-xl transition-colors flex-1 text-center cursor-pointer"
               >
                 إغلاق اللوحة
