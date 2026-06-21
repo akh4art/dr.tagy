@@ -1527,7 +1527,7 @@ export default function App() {
             </h1>
 
             {/* Sub description */}
-            <p className="text-sm md:text-lg text-[#F7F2EA]/90 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light">
+            <p className="text-sm md:text-lg text-[#F7F2EA]/90 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-light mb-[200px]">
               مجموعة متكاملة من المنتجات الطبيعية تعمل بتناغم لتمنحك تألقاً غير مسبوق
             </p>
 
