@@ -2019,7 +2019,7 @@ export default function App() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '-100px' }}
                       transition={{ duration: 0.6, ease: "easeOut" }}
-                      className={`flex flex-col lg:flex-row ${isEven ? '' : 'lg:flex-row-reverse'} gap-10 lg:gap-16 items-center glass-card-light p-6 md:p-12 rounded-[32px] !border-gold-300/20 shadow-xl relative overflow-hidden group transition-all duration-500 hover:shadow-2xl`}
+                      className={`flex flex-col lg:flex-row ${isEven ? '' : 'lg:flex-row-reverse'} gap-10 lg:gap-16 items-center glass-card-light rounded-[32px] !border-gold-300/20 shadow-xl relative overflow-hidden group transition-all duration-500 hover:shadow-2xl`}
                       id={`product-row-${p.id}`}
                     >
                       {/* Decorative elements for ultimate luxury */}
@@ -2027,7 +2027,7 @@ export default function App() {
                       <div className="absolute bottom-0 left-0 w-16 h-16 border-b-2 border-l-2 border-gold-400/15 pointer-events-none rounded-bl-[32px]"></div>
 
                       {/* 1. IMAGE DISPLAY CONTAINER (Asymmetric Look) */}
-                      <div className="w-full lg:w-5/12 flex flex-col items-center justify-center relative p-6 bg-[#FCFBF8] rounded-2xl border border-gold-200/10 shadow-inner group/img overflow-hidden min-h-[300px] md:min-h-[380px]">
+                      <div className="w-full lg:w-5/12 flex flex-col items-center justify-center relative group/img overflow-hidden min-h-[300px] md:min-h-[380px]">
                         {/* Soft gold backing highlight to give 3D product feel */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-gold-200/15 blur-3xl pointer-events-none group-hover/img:scale-125 transition-transform duration-1000"></div>
                         
@@ -2040,7 +2040,7 @@ export default function App() {
                         <motion.img 
                           src={p.image} 
                           alt={p.name} 
-                          className="w-44 h-44 md:w-60 md:h-60 object-cover mix-blend-multiply group-hover/img:scale-105 transition-transform duration-750 relative z-10"
+                          className="w-full h-full md:w-full md:h-full object-cover mix-blend-multiply group-hover/img:scale-105 transition-transform duration-750 relative z-10"
                           referrerPolicy="no-referrer"
                         />
 
@@ -2059,7 +2059,7 @@ export default function App() {
 
                       {/* 2. PRODUCT DETAILED INFO PANEL */}
                       <div className="w-full lg:w-7/12 space-y-6 flex flex-col justify-between text-right">
-                        <div className="space-y-4">
+                        <div className="space-y-4 p-6 md:p-12">
                           <div className="space-y-1.5">
                             <span className="text-[10px] md:text-xs font-bold text-gold-600 tracking-widest font-serif block uppercase">
                               {p.englishName}
