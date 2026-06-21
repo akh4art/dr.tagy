@@ -239,11 +239,11 @@ export default function App() {
             <span className="text-[9px] text-[#092B21]/70 font-bold">💡 اسحبي لليمين أو اليسار لرؤية باقي التجارب</span>
           </div>
 
-          {/* Navigation controls & Image adding */}
-          <div className="flex items-center justify-between gap-3 mt-4.5" dir="rtl">
+          {/* Navigation controls */}
+          <div className="flex items-center justify-center gap-3 mt-4.5" dir="rtl">
             
             {/* Slider controls arrow keys */}
-            <div className="flex gap-1.5 items-center justify-start">
+            <div className="flex gap-1.5 items-center justify-center">
               <button
                 onClick={() => {
                   const total = mockReviewSlides.length + uploadedReviews.length;
@@ -280,23 +280,6 @@ export default function App() {
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
-            </div>
-
-            {/* Add Experience Image Action */}
-            <div>
-              <label 
-                className="bg-[#092B21] hover:bg-gold-500 text-white hover:text-[#092B21] text-[10px] font-black px-3.5 py-2.5 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer flex items-center gap-1.5"
-                id="btn-upload-review-image-content"
-              >
-                <Upload className="w-3 h-3 text-gold-400" />
-                <span>إضافة تجربة مصورة 📸</span>
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  onChange={handleReviewUpload} 
-                  className="hidden" 
-                />
-              </label>
             </div>
 
           </div>
@@ -1571,9 +1554,9 @@ export default function App() {
 
 
             {/* Main title */}
-            <h1 className="text-2xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.25]">
+            <h1 className="text-1xl md:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.25]">
               تألقي ببشرة نضرة ومثالية خلال 15 يوماً <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-gold-200 to-gold-400 font-serif italic text-3xl md:text-4xl lg:text-5xl font-light block mt-2 ">الروتين الفاخر <br /> لتجديد حيوية وصحة بشرتك</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-gold-200 to-gold-400 font-serif  text-3xl md:text-4xl lg:text-5xl font-light block mt-2 ">الروتين الفاخر <br /> لتجديد حيوية وصحة بشرتك</span>
             </h1>
 
             {/* Sub description */}
@@ -1585,10 +1568,10 @@ export default function App() {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3 relative z-20">
               <button
                 onClick={scrollToCheckout}
-                className="w-full sm:w-auto glass-btn-gold text-[#092B21] font-sans font-black px-8.5 py-4.5 rounded-xl text-md cursor-pointer flex items-center justify-center gap-2.5 shadow-xl hover:shadow-2xl active:scale-95 transition-all"
+                className="w-full sm:w-auto glass-btn-gold-transparent font-sans font-black px-8.5 py-4.5 rounded-xl text-md cursor-pointer flex items-center justify-center gap-2.5 shadow-xl hover:shadow-2xl active:scale-95 transition-all"
                 id="hero-cta-btn"
               >
-                <ShoppingBag className="w-5 h-5 text-[#092B21]" />
+                <ShoppingBag className="w-5 h-5 text-current" />
                 <span>ابدئي روتينكِ العلاجي الآن</span>
               </button>
               <a
@@ -2963,34 +2946,10 @@ export default function App() {
         </div>
       </footer>
 
-      {/* 12. FLOATING REAL-TIME SOCIAL PROOF TOAST TICKER */}
-      <AnimatePresence>
-        {activeNotification && (
-          <motion.div
-            initial={{ opacity: 0, y: 50, x: 20 }}
-            animate={{ opacity: 1, y: 0, x: 0 }}
-            exit={{ opacity: 0, y: 20, x: 10 }}
-            className="fixed bottom-6 left-6 z-55 bg-white/95 backdrop-blur-xl border border-gold-300/40 p-4.5 rounded-2xl shadow-2xl flex items-center gap-3.5 max-w-[340px] w-full"
-            id="floating-sales-notifier"
-          >
-            <div className="w-10 h-10 rounded-full bg-[#092B21] shrink-0 flex items-center justify-center border border-gold-400/30 text-gold-400 font-serif font-black text-xs shadow">
-              DT
-            </div>
-            <div className="text-right space-y-0.5">
-              <span className="text-[11px] font-extrabold text-[#092B21] block">
-                {activeNotification.name} من {activeNotification.city}
-              </span>
-              <span className="text-xs text-[#5D5751] block font-light leading-relaxed">
-                حجزت للتو: <span className="font-bold text-gold-700">{activeNotification.product}</span>
-              </span>
-              <span className="text-[9px] text-[#A29A93] block font-mono">{activeNotification.time}</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       {/* FLOATING WHATSAPP CONSULTATION WIDGET */}
-      <div className="fixed bottom-6 right-6 z-55">
+      <div className="fixed bottom-24 md:bottom-8 right-6 z-55">
         <a 
           href="https://wa.me/905511584123?text=مرحباً دكتور تاجي، أود الحصول على استشارة طبية مجانية بخصوص الروتين العلاجي للبشرة في تركيا"
           target="_blank"
