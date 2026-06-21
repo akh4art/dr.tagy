@@ -154,11 +154,6 @@ export default function App() {
         id="hero-package-display-content"
       >
         
-        {/* Dynamic status/ribbon header badge */}
-        <div className="absolute -top-3.5 -right-3.5 bg-gradient-to-r from-[#092B21] to-[#1a5141] text-white text-[9px] font-black px-4.5 py-1.5 rounded-full shadow-md select-none flex items-center gap-1 border border-gold-400/20 z-10" dir="rtl">
-          <Sparkles className="w-3 h-3 text-gold-300 shrink-0" />
-          <span>أحدث تجارب العميلات والاعتمادات الرسمية 🏆</span>
-        </div>
 
         {/* Slider content view */}
         <div className="min-h-[350px] flex flex-col justify-between group mt-3">
@@ -1505,51 +1500,23 @@ export default function App() {
       
       {/* 1. TOP SPECIAL BANNER SLIDESHOW TICKER (Luxury Ribbon) */}
       <div className="bg-[#092B21] text-[#F7F2EA] py-3.5 px-6 text-xs md:text-sm font-medium border-b border-gold-400/35 shadow-lg relative z-40">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-center md:text-right">
-          <div className="flex items-center gap-2 justify-center">
-            <Sparkles className="w-4 h-4 text-gold-300 shrink-0 animate-pulse" />
-            <span className="font-extrabold text-gold-100 text-xs md:text-sm tracking-wide leading-relaxed">
-               احصلي على واقي الشمس الطبي مجاناً بالكامل
-            </span>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={scrollToCheckout} 
-              className="inline-flex items-center gap-1.5 bg-gradient-to-r from-gold-400 to-gold-300 hover:from-gold-300 hover:to-gold-500 text-[#092B21] px-4.5 py-1.5 rounded-full text-xs font-black transition-all shrink-0 cursor-pointer shadow-md hover:shadow-xl active:scale-95"
-              id="cta-top-ticker"
-            >
-              <Flame className="w-3.5 h-3.5 animate-bounce" />
-              <span>استفيدي من العرض الآن</span>
-            </button>
-
-            {/* Quick Deluxe Reservations toggle */}
-            <button 
-              onClick={() => navigateTo(showAdminPanel ? '/' : '/orders')} 
-              className="p-1.5 bg-white/10 hover:bg-white/20 text-[#F7F2EA] hover:text-gold-300 rounded-full transition-all relative border border-white/10"
-              title="حجوزاتكِ"
-              id="orders-admin-btn"
-            >
-              <ClipboardList className="w-4 h-4" />
-              {savedOrders.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white font-sans text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                  {savedOrders.length}
-                </span>
-              )}
-            </button>
-          </div>
+        <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-center">
+          <Sparkles className="w-4 h-4 text-gold-300 shrink-0 animate-pulse" />
+          <span className="font-extrabold text-gold-100 text-xs md:text-sm tracking-wide leading-relaxed">
+             احصلي على واقي الشمس الطبي مجاناً بالكامل 
+          </span>
         </div>
       </div>
 
       {/* 3. HERO & BEAUTY GOAL SELECTOR SECTION */}
-      <section className="relative py-10 lg:py-28 px-6 md:px-12 lg:px-24 overflow-hidden min-h-[75vh] lg:min-h-[90vh] flex items-center bg-[#092B21] isolate">
+      <section className="relative py-6 lg:py-28 px-6 md:px-12 lg:px-24 overflow-hidden h-[calc(100vh-53px)] lg:h-auto lg:min-h-[90vh] flex items-center bg-[#092B21] isolate">
         {/* Aesthetic Background Video Loop */}
         <HeroVideoBackground />
 
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10 w-full">
           
           {/* Right Column: Catchy luxury typography and offer details */}
-          <div className="lg:col-span-7 space-y-8 text-center lg:text-right relative z-10">
+          <div className="lg:col-span-7 space-y-6 lg:space-y-8 text-center lg:text-right relative z-10">
             
 
 
@@ -1568,10 +1535,10 @@ export default function App() {
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-3 relative z-20">
               <button
                 onClick={scrollToCheckout}
-                className="w-full sm:w-auto glass-btn-gold-transparent font-sans font-black px-8.5 py-4.5 rounded-xl text-md cursor-pointer flex items-center justify-center gap-2.5 shadow-xl hover:shadow-2xl active:scale-95 transition-all"
+                className="w-full sm:w-auto bg-gold-400/20 hover:bg-gold-500/35 text-white border-2 border-gold-300/40 hover:border-gold-300/70 font-bold px-6.5 py-4.5 rounded-xl text-xs transition-all text-center flex items-center justify-center gap-2 hover:shadow-md backdrop-blur-md cursor-pointer"
                 id="hero-cta-btn"
               >
-                <ShoppingBag className="w-5 h-5 text-current" />
+                <ShoppingBag className="w-4 h-4 text-white" />
                 <span>ابدئي روتينكِ العلاجي الآن</span>
               </button>
               <a
@@ -1592,15 +1559,15 @@ export default function App() {
                 <span className="text-xs md:text-sm font-bold text-white block mt-1">المتبقي على انتهاء الهدايا المجانية والشحن المجاني:</span>
               </div>
               <div className="flex gap-3 text-center font-mono relative z-10">
-                <div className="bg-[#124939]/80 px-3.5 py-2.5 rounded-xl border border-gold-300/20 min-w-[62px]">
+                <div className="bg-[#124939]/35 backdrop-blur-md px-3.5 py-2.5 rounded-xl border border-gold-300/20 min-w-[62px]">
                   <span className="block text-xl font-bold text-gold-300">{String(timeLeft.seconds).padStart(2, '0')}</span>
                   <span className="text-[10px] text-neutral-300 block mt-0.5 font-sans">ثانية</span>
                 </div>
-                <div className="bg-[#124939]/80 px-3.5 py-2.5 rounded-xl border border-gold-300/20 min-w-[62px]">
+                <div className="bg-[#124939]/35 backdrop-blur-md px-3.5 py-2.5 rounded-xl border border-gold-300/20 min-w-[62px]">
                   <span className="block text-xl font-bold text-gold-300">{String(timeLeft.minutes).padStart(2, '0')}</span>
                   <span className="text-[10px] text-neutral-300 block mt-0.5 font-sans">دقيقة</span>
                 </div>
-                <div className="bg-[#124939]/80 px-3.5 py-2.5 rounded-xl border border-gold-300/20 min-w-[62px]">
+                <div className="bg-[#124939]/35 backdrop-blur-md px-3.5 py-2.5 rounded-xl border border-gold-300/20 min-w-[62px]">
                   <span className="block text-xl font-bold text-gold-300">{String(timeLeft.hours).padStart(2, '0')}</span>
                   <span className="text-[10px] text-neutral-300 block mt-0.5 font-sans">ساعة</span>
                 </div>
