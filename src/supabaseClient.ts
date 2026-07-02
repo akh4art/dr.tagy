@@ -3,7 +3,11 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey);
+
+export const supabase = isSupabaseConfigured
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 // ── Types ────────────────────────────────────────────────────
 export interface DbOrder {
@@ -22,8 +26,13 @@ export interface DbOrder {
   updated_at: string;
 }
 
+function noopClient() {
+  console.warn('Supabase is not configured (VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY missing)');
+}
+
 // ── Orders ───────────────────────────────────────────────────
 export async function fetchOrders(): Promise<DbOrder[]> {
+  if (!supabase) { noopClient(); return []; }
   const { data, error } = await supabase
     .from('orders')
     .select('*')
@@ -33,6 +42,7 @@ export async function fetchOrders(): Promise<DbOrder[]> {
 }
 
 export async function insertOrder(order: Omit<DbOrder, 'updated_at'>): Promise<DbOrder | null> {
+  if (!supabase) { noopClient(); return null; }
   const { data, error } = await supabase
     .from('orders')
     .insert([{ ...order, updated_at: new Date().toISOString() }])
@@ -46,6 +56,7 @@ export async function updateOrderStatus(
   id: string,
   status: DbOrder['status']
 ): Promise<boolean> {
+  if (!supabase) { noopClient(); return false; }
   const { error } = await supabase
     .from('orders')
     .update({ status, updated_at: new Date().toISOString() })
@@ -58,6 +69,7 @@ export async function updateOrder(
   id: string,
   fields: Partial<DbOrder>
 ): Promise<boolean> {
+  if (!supabase) { noopClient(); return false; }
   const { error } = await supabase
     .from('orders')
     .update({ ...fields, updated_at: new Date().toISOString() })
@@ -67,6 +79,7 @@ export async function updateOrder(
 }
 
 export async function deleteOrder(id: string): Promise<boolean> {
+  if (!supabase) { noopClient(); return false; }
   const { error } = await supabase.from('orders').delete().eq('id', id);
   if (error) { console.error('deleteOrder:', error.message); return false; }
   return true;
@@ -74,6 +87,7 @@ export async function deleteOrder(id: string): Promise<boolean> {
 
 // ── Uploaded Review Images ────────────────────────────────────
 export async function fetchUploadedImages(): Promise<{ id: number; image_url: string; caption?: string }[]> {
+  if (!supabase) { noopClient(); return []; }
   const { data, error } = await supabase
     .from('uploaded_review_images')
     .select('*')
@@ -86,6 +100,7 @@ export async function insertUploadedImage(
   image_url: string,
   caption?: string
 ): Promise<{ id: number; image_url: string } | null> {
+  if (!supabase) { noopClient(); return null; }
   const { data, error } = await supabase
     .from('uploaded_review_images')
     .insert([{ image_url, caption }])
@@ -96,6 +111,7 @@ export async function insertUploadedImage(
 }
 
 export async function deleteUploadedImage(id: number): Promise<boolean> {
+  if (!supabase) { noopClient(); return false; }
   const { error } = await supabase.from('uploaded_review_images').delete().eq('id', id);
   if (error) { console.error('deleteUploadedImage:', error.message); return false; }
   return true;
