@@ -1,0 +1,8 @@
+{
+  "name": "Remix: دكتور تاجي",
+  "description": "صفحة هبوط فاخرة عالية التحويل لبراند دكتور تاجي (Dr. Tagy) الطبي للعناية بالبشرة والرموش، غنية بالانتقالات التفاعلية وصندوق شراء فوري سلس.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
