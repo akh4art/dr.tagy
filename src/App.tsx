@@ -1942,11 +1942,11 @@ export default function App() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.4 }}
-                className="absolute bottom-8 -left-4 bg-white/90 backdrop-blur-sm border border-gold-300/30 rounded-xl px-3.5 py-2 shadow-lg"
+                className="absolute -top-3 left-2 sm:left-4 z-20 bg-white/95 backdrop-blur-sm border border-gold-300/30 rounded-xl px-3.5 py-2 shadow-lg"
               >
                 <span className="text-[10px] text-green-700 font-bold whitespace-nowrap">خالٍ من المواد الضارة ✦</span>
               </motion.div>
-              <img src={fourProductsImg} alt="dr.tagy products" className="w-full h-auto object-contain" />
+              <img src={fourProductsImg} alt="dr.tagy products" className="w-full h-auto object-contain -mt-10 sm:-mt-12 md:-mt-14" style={{ margin: '-50px 0px' }} />
             </div>
 
             {/* العمود الأيمن: النقاط الأربعة بشكل عمودي أنيق */}
