@@ -1945,7 +1945,7 @@ export default function App() {
               >
                 <span className="text-[10px] text-green-700 font-bold whitespace-nowrap">خالٍ من المواد الضارة ✦</span>
               </motion.div>
-              <img scc="src/assets/images/4products.webp" alt="dr.tagy products"></img>
+              <img src="./assets/images/4products.webp" alt="dr.tagy products"></img>
             </div>
 
             {/* العمود الأيمن: النقاط الأربعة بشكل عمودي أنيق */}
