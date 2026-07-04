@@ -52,6 +52,7 @@ import { Product, Order } from './types';
 import { products, reviews, faqs } from './data';
 import { ADMIN_EMAIL, ADMIN_PASSWORD, WHATSAPP_NUMBER } from './config';
 import HeroVideoBackground from './components/HeroVideoBackground';
+import fourProductsImg from './assets/images/4products.webp';
 import {
   fetchOrders,
   insertOrder,
@@ -1945,7 +1946,7 @@ export default function App() {
               >
                 <span className="text-[10px] text-green-700 font-bold whitespace-nowrap">خالٍ من المواد الضارة ✦</span>
               </motion.div>
-              <img src="./assets/images/4products.webp" alt="dr.tagy products"></img>
+              <img src={fourProductsImg} alt="dr.tagy products" className="w-full h-auto object-contain" />
             </div>
 
             {/* العمود الأيمن: النقاط الأربعة بشكل عمودي أنيق */}
