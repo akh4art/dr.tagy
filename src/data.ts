@@ -1,9 +1,9 @@
 import { Product, Review } from './types';
 
-import creamImg from './assets/images/dr_tagy_cream_1781518287013.jpg';
-import sunscreenImg from './assets/images/dr_tagy_sunscreen_1781518303132.jpg';
-import eyeluxeImg from './assets/images/dr_tagy_eyeluxe_1781518317168.jpg';
-import cleanserImg from './assets/images/dr_tagy_cleanser_1781518331180.jpg';
+import creamImg from './assets/images/6in1.webp';
+import sunscreenImg from './assets/images/sunscreen.webp';
+import eyeluxeImg from './assets/images/eyeluxe.webp';
+import cleanserImg from './assets/images/facecleaning.webp';
 
 export const products: Product[] = [
   {
@@ -77,7 +77,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'rev-2',
-    author: 'أ.د. ياسمين شاهين (أخصائية جلدية والتجميل)',
+    author: 'د. ياسمين شاهين (أخصائية جلدية والتجميل)',
     city: 'أنقرة',
     rating: 5,
     date: 'منذ أسبوع',
@@ -87,7 +87,7 @@ export const reviews: Review[] = [
   },
   {
     id: 'rev-3',
-    author: 'نورة يلدز',
+    author: 'نورة الحمصي',
     city: 'بورصة',
     rating: 5,
     date: 'منذ أسبوعين',

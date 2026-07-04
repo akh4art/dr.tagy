@@ -2066,7 +2066,7 @@ export default function App() {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6 text-center"
                 >
-                  <h4 className="text-sm md:text-base font-bold text-warm-800">الخطوة الأولى: ما هو طبيعة ملمس وطبيعة بشرتك الحالية؟</h4>
+                  <h4 className="text-sm md:text-base font-bold text-warm-800">ما هو طبيعة ملمس وطبيعة بشرتك الحالية؟</h4>
                   <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
                     {[
                       { key: 'oily', title: 'دهنية أو مختلطة (لمعان وبثور)', desc: 'تحتاج إلى موازنة الإفرازات وتنقية عميقة.' },
@@ -2099,7 +2099,7 @@ export default function App() {
                   exit={{ opacity: 0, x: -20 }}
                   className="space-y-6 text-center"
                 >
-                  <h4 className="text-sm md:text-base font-bold text-warm-800">الخطوة الثانية: ما هي المعضلة الأهم المطلوب تغييرها الفتر الحالية للوجه؟</h4>
+                  <h4 className="text-sm md:text-base font-bold text-warm-800">ما هي المعضلة الأهم المطلوب تغييرها الفتر الحالية للوجه؟</h4>
                   <div className="grid grid-cols-1 gap-4 max-w-lg mx-auto">
                     {[
                       { key: 'wrinkle', title: 'التجاعيد، التجاهيد، وخطوط حول الفم والوجه', desc: 'ببتيدات الذهب والكولاجين الثنائي' },
@@ -2154,8 +2154,8 @@ export default function App() {
                     <div className="flex gap-3 justify-start items-center">
                       <div className="w-10 h-10 rounded-full bg-gold-400/10 text-gold-600 flex items-center justify-center font-bold">✓</div>
                       <div>
-                        <span className="text-[10px] text-[#aa843f] font-extrabold uppercase block font-sans">THE CLINICAL MATCH</span>
-                        <span className="text-sm font-bold text-warm-800 block">مجموعة بروتوكول دكتور تاجي المتكاملة</span>
+                        <span className="text-[10px] text-[#aa843f] font-extrabold uppercase block font-sans">الأكثر فاعلية</span>
+                        <span className="text-sm font-bold text-warm-800 block">مجموعة دكتور تاجي المتكاملة</span>
                       </div>
                     </div>
                     
@@ -2166,7 +2166,7 @@ export default function App() {
                     <div className="flex items-center justify-between border-t border-gold-400/15 pt-3.5 mt-2">
                       <div>
                         <span className="text-[10px] text-gray-400 block line-through">2700 TL</span>
-                        <span className="text-lg font-bold text-warm-800">2050 TL (عرض مدمج)</span>
+                        <span className="text-lg font-bold text-warm-800">2050 TL</span>
                       </div>
                       
                       <button
@@ -2195,31 +2195,13 @@ export default function App() {
                             <path d="M271.56,47.06c-61.69-62.3-162.2-62.8-224.5-1.11C-1.98,94.5-14.03,169.19,17.25,230.71L.41,312.48c-.35,1.65,0,3.36.96,4.74,1.43,2.12,4.03,3.13,6.52,2.53l80.15-19c78.5,39.02,173.76,7.01,212.78-71.49,30.19-60.75,18.44-133.97-29.24-182.22h0ZM246.57,246.5c-37.79,37.68-95.41,47.05-143.19,23.27l-11.17-5.53-49.13,11.64.15-.61,10.18-49.45-5.47-10.79c-24.42-47.96-15.19-106.2,22.87-144.26,48.54-48.53,127.23-48.53,175.77,0,.2.23.41.44.64.64,47.92,48.63,47.64,126.82-.64,175.1Z"/>
                             <path d="M242.21,210.23c-6.02,9.48-15.53,21.09-27.49,23.97-20.95,5.06-53.09.17-93.09-37.12l-.49-.44c-35.17-32.61-44.31-59.75-42.09-81.28,1.22-12.22,11.4-23.27,19.99-30.49,4.8-4.1,12.02-3.53,16.12,1.27.73.85,1.32,1.8,1.77,2.83l12.95,29.09c1.71,3.84,1.17,8.32-1.43,11.64l-6.55,8.49c-2.87,3.59-3.28,8.56-1.02,12.57,3.67,6.43,12.45,15.88,22.2,24.64,10.94,9.89,23.07,18.94,30.75,22.02,4.2,1.72,9.03.7,12.19-2.56l7.59-7.65c2.98-2.94,7.32-4.05,11.35-2.91l30.75,8.73c6.14,1.88,9.6,8.39,7.71,14.54-.29.93-.69,1.82-1.2,2.66h0Z"/>
                           </svg>
-                          استمري بالاستشارة الطبية الفورية عبر واتساب
+                         استشارة فورية عبر واتساب
                         </span>
                       </a>
                     </div>
                   </div>
 
-                  <div className="flex gap-4 justify-center items-center pt-2">
-                    <button 
-                      onClick={() => setQuizStep(1)}
-                      className="text-xs font-bold text-gray-400 hover:text-gold-600 cursor-pointer underline"
-                    >
-                      إعادة التحليل من جديد
-                    </button>
-                    <span className="text-gray-300">|</span>
-                    <button 
-                      onClick={() => {
-                        // Recommend cleanser only for single item
-                        selectRecommendation(false, 'dr-cleanser');
-                        setQuizStep(1);
-                      }}
-                      className="text-xs font-bold text-gray-400 hover:text-warm-800 cursor-pointer underline"
-                    >
-                      أريد غسول الطحالب منفردة فقط
-                    </button>
-                  </div>
+
                 </motion.div>
               )}
             </AnimatePresence>
@@ -2536,105 +2518,18 @@ export default function App() {
           <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
             <span className="inline-flex items-center gap-2 bg-gold-100 border border-gold-300/30 px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold text-gold-700 tracking-widest">
               <Lock className="w-3 h-3 text-gold-600" />
-              تأكيد حجز الصندوق
+              طلب سريع وآمن
             </span>
             <h2 className="text-2xl md:text-5xl font-black text-warm-800">نموذج الحجز وتفاصيل التوصيل</h2>
             <div className="w-20 h-[1px] bg-gradient-to-l from-gold-400/60 via-gold-400/30 to-transparent mx-auto"></div>
             <p className="text-xs md:text-sm text-warm-500">
-              أكدي الطرد مجاناً — الدفع عند الاستلام بعد التأكد من سلامة المنتجات
+              إملأي الحقول بالبيانات المطلوبة لإرسال الطلب بسرعة
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" id="checkout-card">
             
-            {/* LEFT: Invoice summary */}
-            <div className="lg:col-span-5 space-y-6">
-              
-              <div className="bg-white border border-cream-300/40 rounded-[24px] p-6 md:p-8 space-y-6 relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 left-[10%] right-[10%] h-[1px] bg-gradient-to-r from-transparent via-gold-400/20 to-transparent"></div>
-                
-                <h3 className="text-sm font-black text-warm-800 border-b border-cream-200/60 pb-4 flex items-center justify-between">
-                  <span>فاتورة الحجز</span>
-                  <ShoppingBag className="w-4 h-4 text-gold-500" />
-                </h3>
 
-                {selectedOffer === 'bundle' ? (
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-start">
-                      <div className="space-y-1">
-                        <span className="font-bold text-warm-800 text-xs md:text-sm block">البكج العلاجي المتكامل</span>
-                        <span className="text-[10px] text-warm-400 block leading-relaxed">غسول طحالب + كريم 6في1 + سيروم Eyeluxe</span>
-                        <span className="text-[10px] text-gold-600 font-extrabold flex items-center gap-1">
-                          <Gift className="w-3 h-3 text-gold-600" />
-                          <span>واقي شمس SPF50 مجاناً</span>
-                        </span>
-                      </div>
-                      <span className="font-mono text-xs md:text-sm text-gold-600 font-bold shrink-0">{bundleQuantity} × 2050 TL</span>
-                    </div>
-
-                    <div className="bg-cream-50 border border-cream-200/60 rounded-xl p-3.5 space-y-2">
-                      <div className="flex justify-between text-[10px] text-warm-500 font-bold">
-                        <span>واقي شمس SPF50:</span>
-                        <span className="line-through text-warm-300">650 TL</span>
-                      </div>
-                      <div className="flex justify-between text-[10px] text-gold-600 font-bold">
-                        <span>خصم التكامل:</span>
-                        <span>- 650 TL</span>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-start">
-                      <div className="space-y-1">
-                        <span className="font-bold text-warm-800 text-xs md:text-sm block">{selectedProductObj.name}</span>
-                        <span className="text-[10px] text-warm-400 block">{selectedProductObj.size}</span>
-                        <span className="text-[10px] text-gold-600/70 font-bold block">{selectedProductObj.activeSubst}</span>
-                      </div>
-                      <span className="font-mono text-xs md:text-sm text-gold-600 font-bold shrink-0">{singleQuantity} × {selectedProductObj.price} TL</span>
-                    </div>
-                  </div>
-                )}
-
-                <div className="space-y-2.5 pt-4 border-t border-cream-200/60 text-[11px] text-warm-500">
-                  <div className="flex justify-between items-center">
-                    <span>شحن مبرد</span>
-                    <span className="text-emerald-600 font-bold">مجاناً</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>الدفع عند الاستلام</span>
-                    <span className="text-emerald-600 font-bold">مجاناً</span>
-                  </div>
-                  <div className="flex justify-between items-center bg-cream-50 p-3.5 rounded-xl mt-3">
-                    <div>
-                      <span className="text-[9px] text-warm-400 block">الإجمالي الكلي</span>
-                      <span className="text-[8px] text-gold-600/60 block mt-0.5">بدون ضرائب</span>
-                    </div>
-                    <span className="text-lg md:text-xl font-black text-gold-600">{totalPrice} TL</span>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Trust seals */}
-              <div className="bg-white border border-cream-300/40 rounded-[24px] p-5 space-y-4 shadow-sm">
-                <div className="flex items-center gap-3">
-                  <ShieldCheck className="w-7 h-7 text-gold-500 shrink-0" />
-                  <div>
-                    <span className="text-[11px] font-black text-warm-800 block">معاينة الطرد قبل الدفع</span>
-                    <span className="text-[9px] text-warm-400 block">افحصي المنتجات بنفسك</span>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Truck className="w-7 h-7 text-gold-500 shrink-0" />
-                  <div>
-                    <span className="text-[11px] font-black text-warm-800 block">شحن طبي مبرد</span>
-                    <span className="text-[9px] text-warm-400 block">ضمان بقاء المستحضرات بحرارة آمنة</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
 
             {/* RIGHT: Form */}
             <div className="lg:col-span-7 bg-white border border-cream-300/40 rounded-[24px] p-6 md:p-8 shadow-sm">
