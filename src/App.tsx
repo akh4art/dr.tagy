@@ -1155,67 +1155,41 @@ export default function App() {
               <span className="text-xs text-neutral-400 font-semibold font-sans">({statsTotalCount} طرد مسجل)</span>
             </h3>
             
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3" id="order-types-distribution">
+            <div className="grid grid-cols-5 gap-2" id="order-types-distribution">
               
               {/* Box 1 : Pending orders */}
-              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm text-center relative hover:border-amber-400 transition-all">
-                <div className="w-2 h-2 rounded-full bg-amber-500 absolute top-4 left-4 animate-pulse"></div>
-                <p className="text-neutral-450 text-xs font-bold mb-1.5 flex items-center justify-center gap-1">
-                  <span>بالإنتظار</span>
-                  <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-sans font-black">⏳</span>
-                </p>
-                <span className="text-3xl font-black text-amber-500 block font-mono">{statsPendingCount}</span>
-                <p className="text-[10px] text-neutral-450 mt-2">
-                  تمثل <span className="font-bold font-sans">{statsTotalCount > 0 ? Math.round((statsPendingCount / statsTotalCount) * 100) : 0}%</span> من إجمالي الطلبات
-                </p>
+              <div className={`rounded-xl p-3 text-center border transition-all ${statsPendingCount > 0 ? 'bg-amber-50/80 border-amber-200/50' : 'bg-neutral-50 border-neutral-200/50'}`}>
+                <span className="text-[9px] font-black text-amber-800 block">⏳ بالإنتظار</span>
+                <span className="text-xl font-black text-amber-600 block font-mono mt-1 leading-tight">{statsPendingCount}</span>
+                <span className="text-[9px] text-amber-500/70 font-bold">{statsTotalCount > 0 ? Math.round((statsPendingCount / statsTotalCount) * 100) : 0}%</span>
               </div>
 
               {/* Box 2 : Preparing orders */}
-              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm text-center relative hover:border-blue-400 transition-all">
-                <p className="text-neutral-450 text-xs font-bold mb-1.5 flex items-center justify-center gap-1">
-                  <span>تم التجهيز</span>
-                  <span className="bg-blue-100 text-blue-800 text-[10px] px-1.5 py-0.5 rounded-full font-sans font-black">📦</span>
-                </p>
-                <span className="text-3xl font-black text-blue-600 block font-mono">{statsPreparingCount}</span>
-                <p className="text-[10px] text-neutral-450 mt-2">
-                  تمثل <span className="font-bold font-sans">{statsTotalCount > 0 ? Math.round((statsPreparingCount / statsTotalCount) * 100) : 0}%</span> جاري التجهيز
-                </p>
+              <div className={`rounded-xl p-3 text-center border transition-all ${statsPreparingCount > 0 ? 'bg-blue-50/80 border-blue-200/50' : 'bg-neutral-50 border-neutral-200/50'}`}>
+                <span className="text-[9px] font-black text-blue-800 block">📦 تم التجهيز</span>
+                <span className="text-xl font-black text-blue-600 block font-mono mt-1 leading-tight">{statsPreparingCount}</span>
+                <span className="text-[9px] text-blue-500/70 font-bold">{statsTotalCount > 0 ? Math.round((statsPreparingCount / statsTotalCount) * 100) : 0}%</span>
               </div>
 
               {/* Box 3 : Shipped orders */}
-              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm text-center relative hover:border-indigo-400 transition-all">
-                <p className="text-neutral-450 text-xs font-bold mb-1.5 flex items-center justify-center gap-1">
-                  <span>تم الشحن</span>
-                  <span className="bg-indigo-100 text-indigo-800 text-[10px] px-1.5 py-0.5 rounded-full font-sans font-black">🚚</span>
-                </p>
-                <span className="text-3xl font-black text-indigo-600 block font-mono">{statsShippedCount}</span>
-                <p className="text-[10px] text-neutral-450 mt-2">
-                  تمثل <span className="font-bold font-sans">{statsTotalCount > 0 ? Math.round((statsShippedCount / statsTotalCount) * 100) : 0}%</span> في طريق التوصيل
-                </p>
+              <div className={`rounded-xl p-3 text-center border transition-all ${statsShippedCount > 0 ? 'bg-indigo-50/80 border-indigo-200/50' : 'bg-neutral-50 border-neutral-200/50'}`}>
+                <span className="text-[9px] font-black text-indigo-800 block">🚚 تم الشحن</span>
+                <span className="text-xl font-black text-indigo-600 block font-mono mt-1 leading-tight">{statsShippedCount}</span>
+                <span className="text-[9px] text-indigo-500/70 font-bold">{statsTotalCount > 0 ? Math.round((statsShippedCount / statsTotalCount) * 100) : 0}%</span>
               </div>
 
               {/* Box 4 : Delivered orders */}
-              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm text-center relative hover:border-green-400 transition-all">
-                <p className="text-neutral-450 text-xs font-bold mb-1.5 flex items-center justify-center gap-1">
-                  <span>تم التسليم</span>
-                  <span className="bg-green-100 text-green-800 text-[10px] px-1.5 py-0.5 rounded-full font-sans font-black">✅</span>
-                </p>
-                <span className="text-3xl font-black text-green-600 block font-mono">{statsDeliveredCount}</span>
-                <p className="text-[10px] text-neutral-450 mt-2">
-                  تمثل <span className="font-bold font-sans">{statsTotalCount > 0 ? Math.round((statsDeliveredCount / statsTotalCount) * 100) : 0}%</span> تم استلامها
-                </p>
+              <div className={`rounded-xl p-3 text-center border transition-all ${statsDeliveredCount > 0 ? 'bg-green-50/80 border-green-200/50' : 'bg-neutral-50 border-neutral-200/50'}`}>
+                <span className="text-[9px] font-black text-green-800 block">✅ تم التسليم</span>
+                <span className="text-xl font-black text-green-600 block font-mono mt-1 leading-tight">{statsDeliveredCount}</span>
+                <span className="text-[9px] text-green-500/70 font-bold">{statsTotalCount > 0 ? Math.round((statsDeliveredCount / statsTotalCount) * 100) : 0}%</span>
               </div>
 
               {/* Box 5 : Cancelled orders */}
-              <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm text-center relative hover:border-gray-400 transition-all">
-                <p className="text-neutral-450 text-xs font-bold mb-1.5 flex items-center justify-center gap-1">
-                  <span>ملغي</span>
-                  <span className="bg-gray-100 text-gray-800 text-[10px] px-1.5 py-0.5 rounded-full font-sans font-black">✗</span>
-                </p>
-                <span className="text-3xl font-black text-gray-500 block font-mono">{statsCancelledCount}</span>
-                <p className="text-[10px] text-neutral-450 mt-2">
-                  تمثل <span className="font-bold font-sans">{statsTotalCount > 0 ? Math.round((statsCancelledCount / statsTotalCount) * 100) : 0}%</span> ملغية
-                </p>
+              <div className={`rounded-xl p-3 text-center border transition-all ${statsCancelledCount > 0 ? 'bg-gray-50/80 border-gray-200/50' : 'bg-neutral-50 border-neutral-200/50'}`}>
+                <span className="text-[9px] font-black text-gray-700 block">✗ ملغي</span>
+                <span className="text-xl font-black text-gray-600 block font-mono mt-1 leading-tight">{statsCancelledCount}</span>
+                <span className="text-[9px] text-gray-500/70 font-bold">{statsTotalCount > 0 ? Math.round((statsCancelledCount / statsTotalCount) * 100) : 0}%</span>
               </div>
 
             </div>

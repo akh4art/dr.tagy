@@ -75,14 +75,11 @@ CREATE POLICY "products_public_read" ON products FOR SELECT USING (true);
 CREATE POLICY "products_anon_insert" ON products FOR INSERT WITH CHECK (true);
 CREATE POLICY "products_anon_update" ON products FOR UPDATE USING (true);
 
--- orders: 
---   - anon: can only INSERT (submit new orders) and SELECT (for admin/status check)
---   - UPDATE/DELETE: requires service_role (admin via backend) 
---   - Admin panel updates go through a Supabase Edge Function or service_role client
+-- orders: قراءة + إضافة + تحديث + حذف (لوحة التحكم تعمل من الفرونت إند)
 CREATE POLICY "orders_anon_select" ON orders FOR SELECT USING (true);
 CREATE POLICY "orders_anon_insert" ON orders FOR INSERT WITH CHECK (true);
-CREATE POLICY "orders_service_update" ON orders FOR UPDATE USING (auth.role() = 'service_role');
-CREATE POLICY "orders_service_delete" ON orders FOR DELETE USING (auth.role() = 'service_role');
+CREATE POLICY "orders_anon_update" ON orders FOR UPDATE USING (true);
+CREATE POLICY "orders_anon_delete" ON orders FOR DELETE USING (true);
 
 -- reviews: قراءة + إضافة
 CREATE POLICY "reviews_public_read" ON reviews FOR SELECT USING (true);
