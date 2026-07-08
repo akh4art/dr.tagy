@@ -2568,9 +2568,6 @@ export default function App() {
                     <button onClick={resetForm} className="bg-cream-100 hover:bg-cream-200 text-warm-700 text-xs font-bold px-5 py-2.5 rounded-xl transition-colors cursor-pointer border border-cream-300/40">
                       طلب جديد
                     </button>
-                    <button onClick={() => { resetForm(); navigateTo('/orders'); }} className="bg-gold-100 hover:bg-gold-200 text-gold-700 text-xs font-bold px-5 py-2.5 rounded-xl transition-colors cursor-pointer border border-gold-300/30">
-                      حجوزاتي
-                    </button>
                   </div>
                 </motion.div>
               ) : (
