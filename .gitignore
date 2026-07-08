@@ -9,3 +9,8 @@ coverage/
 drtagy/
 .graphify/
 src/.graphify/
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
